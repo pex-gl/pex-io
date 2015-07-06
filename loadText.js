@@ -22,7 +22,7 @@ function loadTextBrowser(url, callback) {
 function loadTextPlask(path, callback) {
   if (!fs.existsSync(path)) {
     if (callback) {
-      return callback('File doesn\t exist', null);
+      return callback('File doesn\'t exist ' + '"' + path + '"', null);
     }
   }
   var data = fs.readFileSync(path, 'utf8');
