@@ -33,5 +33,8 @@
   "bugs": {
     "url": "https://github.com/variablestudio/pex-io/issues"
   },
-  "homepage": "https://github.com/variablestudio/pex-io"
+  "homepage": "https://github.com/variablestudio/pex-io",
+  "dependencies": {
+    "is-browser": "^2.0.1"
+  }
 }
