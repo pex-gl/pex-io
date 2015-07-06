@@ -9,9 +9,14 @@ function loadImageBrowser(url, callback) {
     img.src = url;
 }
 
-function loadImagePlask(url, callback) {
-    var img = plask.SkCanvas.createFromImage(url);
-    callback(null, img);
+function loadImagePlask(path, callback) {
+    try {
+        var img = plask.SkCanvas.createFromImage(path);
+        callback(null, img);
+    }
+    catch(e) {
+        callback(e + ' ' + '"' + path + '"', null);
+    }
 }
 
 module.exports = isBrowser ? loadImageBrowser : loadImagePlask;
