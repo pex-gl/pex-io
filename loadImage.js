@@ -19,4 +19,20 @@ function loadImagePlask(path, callback) {
     }
 }
 
+/**
+ * Loads a HTML Image from an url in the borwser, SkCanvas from a file in Plask
+ * @param {String} file - url addess (Browser) or file path (Plask)
+ * @param {Function} callback - function(err, image) { }
+ * @param {Error} callback.err - error if any or null
+ * @param {Image|SkCanvas} callback.image - loaded image
+ */
+function loadImage(file, callback) {
+    if (isBrowser) {
+        loadImageBrowser(file, callback);
+    }
+    else {
+        loadImagePlask(file, callback);
+    }
+}
+
 module.exports = isBrowser ? loadImageBrowser : loadImagePlask;
