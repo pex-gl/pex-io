@@ -42,4 +42,20 @@ function loadBinaryPlask(file, callback) {
     callback(null, data);
 };
 
-module.exports = isBrowser ? loadBinaryBrowser : loadBinaryPlask;
+/**
+ * Loads binary data
+ * @param {String} file - url addess (Browser) or file path (Plask)
+ * @param {Function} callback - function(err, data) { }
+ * @param {Error} callback.err - error if any or null
+ * @param {ArrayBuffer} callback.data - loaded binary data
+ */
+function loadBinary(file, callback) {
+    if (isBrowser) {
+        loadBinaryBrowser(file, callback);
+    }
+    else {
+        loadBinaryPlask(file, callback);
+    }
+}
+
+module.exports = loadBinary;
