@@ -31,4 +31,20 @@ function loadTextPlask(path, callback) {
   }
 }
 
-module.exports = isBrowser ? loadTextBrowser : loadTextPlask;
+/**
+ * @desc Loads text string
+ * @param {String} file - url addess (Browser) or file path (Plask)
+ * @param {Function} callback - function(err, text) { }
+ * @param {Error} callback.err - error if any or null
+ * @param {String} callback.text - loaded text
+ */
+function loadText(file, callback) {
+    if (isBrowser) {
+        loadTextBrowser(file, callback);
+    }
+    else {
+        loadTextPlask(file, callback);
+    }
+}
+
+module.exports = loadText;
