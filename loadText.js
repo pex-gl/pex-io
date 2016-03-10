@@ -1,4 +1,4 @@
-var isBrowser = require('is-browser');
+var isPlask = require('is-plask');
 var fs = require('fs');
 
 function loadTextBrowser(url, callback) {
@@ -39,11 +39,11 @@ function loadTextPlask(path, callback) {
  * @param {String} callback.text - loaded text
  */
 function loadText(file, callback) {
-    if (isBrowser) {
-        loadTextBrowser(file, callback);
+    if (isPlask) {
+        loadTextPlask(file, callback);
     }
     else {
-        loadTextPlask(file, callback);
+        loadTextBrowser(file, callback);
     }
 }
 

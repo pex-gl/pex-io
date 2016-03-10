@@ -1,4 +1,4 @@
-var isBrowser = require('is-browser');
+var isPlask = require('is-plask');
 var fs = require('fs');
 
 function toArrayBuffer(buffer) {
@@ -50,11 +50,11 @@ function loadBinaryPlask(file, callback) {
  * @param {ArrayBuffer} callback.data - loaded binary data
  */
 function loadBinary(file, callback) {
-    if (isBrowser) {
-        loadBinaryBrowser(file, callback);
+    if (isPlask) {
+        loadBinaryPlask(file, callback);
     }
     else {
-        loadBinaryPlask(file, callback);
+        loadBinaryBrowser(file, callback);
     }
 }
 

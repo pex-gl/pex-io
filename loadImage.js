@@ -1,5 +1,5 @@
-var isBrowser = require('is-browser');
-var plask = isBrowser ? {} : require('plask');
+var isPlask = require('is-plask');
+var plask = isPlask ? require('plask') : {};
 
 function loadImageBrowser(url, callback) {
     var img = new Image();
@@ -27,12 +27,12 @@ function loadImagePlask(path, callback) {
  * @param {Image|SkCanvas} callback.image - loaded image
  */
 function loadImage(file, callback) {
-    if (isBrowser) {
-        loadImageBrowser(file, callback);
+    if (isPlask) {
+        loadImagePlask(file, callback);
     }
     else {
-        loadImagePlask(file, callback);
+        loadImageBrowser(file, callback);
     }
 }
 
-module.exports = isBrowser ? loadImageBrowser : loadImagePlask;
+module.exports = loadImage;
