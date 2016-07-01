@@ -1,5 +1,5 @@
 var isPlask = require('is-plask');
-var plask = isPlask ? require('plask') : {};
+var plask = require('plask-wrap');
 
 function loadImageBrowser(url, callback) {
     var img = new Image();
