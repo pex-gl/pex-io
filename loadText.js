@@ -1,33 +1,32 @@
-var isPlask = require('is-plask');
-var fs = require('fs');
+var isPlask = require('is-plask')
+var fs = require('fs')
 
-function loadTextBrowser(url, callback) {
-  var request = new XMLHttpRequest();
-  request.open('GET', url, true);
+function loadTextBrowser (url, callback) {
+  var request = new window.XMLHttpRequest()
+  request.open('GET', url, true)
   request.onreadystatechange = function (e) {
-    if (request.readyState == 4) {
-      if (request.status == 200) {
+    if (request.readyState === 4) {
+      if (request.status === 200) {
         if (callback) {
-          callback(null, request.responseText);
+          callback(null, request.responseText)
         }
+      } else {
+        callback('loadText error: ' + request.statusText, null)
       }
-      else {
-        callback('WebIO.loadTextFile error : ' + request.statusText, null);
-      }
-    }
-  };
-  request.send(null);
-}
-
-function loadTextPlask(path, callback) {
-  if (!fs.existsSync(path)) {
-    if (callback) {
-      return callback('File doesn\'t exist ' + '"' + path + '"', null);
     }
   }
-  var data = fs.readFileSync(path, 'utf8');
+  request.send(null)
+}
+
+function loadTextPlask (path, callback) {
+  if (!fs.existsSync(path)) {
+    if (callback) {
+      return callback('loadText error: File doesn\'t exist ' + '"' + path + '"', null)
+    }
+  }
+  var data = fs.readFileSync(path, 'utf8')
   if (callback) {
-    callback(null, data);
+    callback(null, data)
   }
 }
 
@@ -38,13 +37,12 @@ function loadTextPlask(path, callback) {
  * @param {Error} callback.err - error if any or null
  * @param {String} callback.text - loaded text
  */
-function loadText(file, callback) {
-    if (isPlask) {
-        loadTextPlask(file, callback);
-    }
-    else {
-        loadTextBrowser(file, callback);
-    }
+function loadText (file, callback) {
+  if (isPlask) {
+    loadTextPlask(file, callback)
+  } else {
+    loadTextBrowser(file, callback)
+  }
 }
 
-module.exports = loadText;
+module.exports = loadText

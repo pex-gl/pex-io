@@ -1,4 +1,4 @@
-var loadText = require('./loadText');
+var loadText = require('./loadText')
 
 /**
  * Loads JSON data
@@ -7,21 +7,19 @@ var loadText = require('./loadText');
  * @param {Error} callback.err - error if any or null
  * @param {String} callback.json - loaded JSON data
  */
-function loadJSON(file, callback) {
-  loadText(file, function(err, data) {
+function loadJSON (file, callback) {
+  loadText(file, function (err, data) {
     if (err) {
-      callback(err, null);
-    }
-    else {
+      callback(err, null)
+    } else {
       try {
-        var json = JSON.parse(data);
-        callback(null, json);
-      }
-      catch(e) {
-        callback(e.toString(), null);
+        var json = JSON.parse(data)
+        callback(null, json)
+      } catch(e) {
+        callback(e.toString(), null)
       }
     }
   })
 }
 
-module.exports = loadJSON;
+module.exports = loadJSON
