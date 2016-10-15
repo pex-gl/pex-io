@@ -9,9 +9,26 @@ function loadImageBrowser (url, callback) {
   img.src = url
 }
 
+function bgra2rgba (width, height, pixels) {
+  var rgba = []
+  for (var y = 0; y < height; y++) {
+    for (var x = 0; x < width; x++) {
+      var i = (x + y * width) * 4
+      rgba.push(
+        pixels[i + 2],
+        pixels[i + 1],
+        pixels[i + 0],
+        pixels[i + 3]
+      )
+    }
+  }
+  return rgba
+}
+
 function loadImagePlask (path, callback) {
   try {
     var img = plask.SkCanvas.createFromImage(path)
+    img.data = bgra2rgba(img.width, img.height, img.pixels)
     callback(null, img)
   } catch(e) {
     callback(e + ' ' + '"' + path + '"', null)
