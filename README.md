@@ -2,7 +2,7 @@
 
 Basic file i/o for the pex library.
 
-Works both in [Plask](http:http://plask.org) and any browser.
+Works both in [Plask](http://plask.org) and any browser.
 
 ## Usage
 
