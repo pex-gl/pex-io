@@ -1,20 +1,24 @@
 var gl = require('pex-gl')(512, 512)
 var regl = require('regl')(gl)
-var loadImage = require('../loadImage')
+// var loadimage = require('../loadimage')
+// loadimage('pex-logo.png', (err, img) => {
 
-loadImage('pex-logo.png', (err, img) => {
+var load = require('../load')
+
+var resources = {
+  img: { image: 'pex-logo.png' }
+}
+
+load(resources, (err, res) => {
   if (err) {
-    // console.log(err)
+    console.log(err)
     return
   }
-  console.log('img w:' + img.width + ' h:' + img.height)
-  
+  var img = res.img
 
-  var tex = regl.texture({
-    width: 512,
-    height: 512,
-    data: img.data
-  })
+  console.log('img w:' + img.width + ' h:' + img.height)
+
+  var tex = regl.texture(img)
 
   var drawImage = regl({
     attributes: {
