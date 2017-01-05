@@ -34,10 +34,15 @@ function load (resources, callback) {
   var numResources = resourceNames.length
 
   function onFinish () {
-    if (hadErrors) {
-      callback(errors, null)
-    } else {
-      callback(null, results)
+    try {
+      if (hadErrors) {
+        callback(errors, null)
+      } else {
+        callback(null, results)
+      }
+    } catch (e) {
+      console.log(e)
+      console.log(e.stack)
     }
   }
 
