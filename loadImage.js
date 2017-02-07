@@ -45,11 +45,11 @@ function loadImagePlask (path, callback) {
  * @param {Error} callback.err - error if any or null
  * @param {Image|SkCanvas} callback.image - loaded image
  */
-function loadImage (file, callback) {
+function loadImage (file, callback, crossOrigin) {
   if (isPlask) {
     loadImagePlask(file, callback)
   } else {
-    loadImageBrowser(file, callback)
+    loadImageBrowser(file, callback, crossOrigin)
   }
 }
 
