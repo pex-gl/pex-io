@@ -1,8 +1,11 @@
 var isPlask = require('is-plask')
 var plask = require('plask-wrap')
 
-function loadImageBrowser (url, callback) {
+function loadImageBrowser (url, callback, crossOrigin) {
   var img = new window.Image()
+  if (crossOrigin) {
+    img.crossOrigin = 'anonymous'
+  }
   img.onload = function () {
     callback(null, img)
   }
