@@ -1,6 +1,6 @@
 {
   "name": "pex-io",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Basic file i/o for the pex library",
   "main": "index.js",
   "repository": {
