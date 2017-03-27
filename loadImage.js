@@ -13,16 +13,14 @@ function loadImageBrowser (url, callback, crossOrigin) {
 }
 
 function bgra2rgba (width, height, pixels) {
-  var rgba = []
+  var rgba = new Uint8Array(width * height * 4)
   for (var y = 0; y < height; y++) {
     for (var x = 0; x < width; x++) {
       var i = (x + y * width) * 4
-      rgba.push(
-        pixels[i + 2],
-        pixels[i + 1],
-        pixels[i + 0],
-        pixels[i + 3]
-      )
+      rgba[i + 0] = pixels[i + 2]
+      rgba[i + 1] = pixels[i + 1]
+      rgba[i + 2] = pixels[i + 0]
+      rgba[i + 3] = pixels[i + 3]
     }
   }
   return rgba
