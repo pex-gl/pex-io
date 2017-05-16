@@ -12,12 +12,13 @@ function loadJSON (file, callback) {
     if (err) {
       callback(err, null)
     } else {
+      var json = null
       try {
-        var json = JSON.parse(data)
-        callback(null, json)
-      } catch(e) {
-        callback(e.toString(), null)
+        json = JSON.parse(data)
+      } catch (e) {
+        return callback(e.toString(), null)
       }
+      callback(null, json)
     }
   })
 }

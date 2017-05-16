@@ -27,13 +27,14 @@ function bgra2rgba (width, height, pixels) {
 }
 
 function loadImagePlask (path, callback) {
+  var img
   try {
-    var img = plask.SkCanvas.createFromImage(path)
+    img = plask.SkCanvas.createFromImage(path)
     img.data = bgra2rgba(img.width, img.height, img.pixels)
-    callback(null, img)
   } catch(e) {
     callback(e + ' ' + '"' + path + '"', null)
   }
+  callback(null, img)
 }
 
 /**
