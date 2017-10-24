@@ -6,6 +6,9 @@ function loadImageBrowser (url, callback, crossOrigin) {
   if (crossOrigin) {
     img.crossOrigin = 'anonymous'
   }
+  img.onerror = function () {
+    callback(new Error('Failed to load ' + url), null)
+  }
   img.onload = function () {
     callback(null, img)
   }
@@ -31,8 +34,8 @@ function loadImagePlask (path, callback) {
   try {
     img = plask.SkCanvas.createFromImage(path)
     img.data = bgra2rgba(img.width, img.height, img.pixels)
-  } catch(e) {
-    callback(e + ' ' + '"' + path + '"', null)
+  } catch (e) {
+    callback(new Error(e + ' ' + '"' + path + '"'), null)
   }
   callback(null, img)
 }
