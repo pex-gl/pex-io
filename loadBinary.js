@@ -19,7 +19,7 @@ function loadBinaryBrowser (url, callback) {
       if (request.status === 200) {
         callback(null, request.response)
       } else {
-        callback('loadBinary error : ' + request.response, null)
+        callback(new Error('loadBinary error : ' + request.response), null)
       }
     }
   }
@@ -30,11 +30,11 @@ function loadBinaryPlask (file, callback) {
   try {
     if (!fs.existsSync(file)) {
       if (callback) {
-        return callback('loadBinary error: File doesn\t exist', null)
+        return callback(new Error('loadBinary error: File doesn\t exist'), null)
       }
     }
-  } catch(e) {
-    return callback('loadBinary error : ' + e.toString(), null)
+  } catch (e) {
+    return callback(new Error('loadBinary error : ' + e.toString()), null)
   }
   var rawData = fs.readFileSync(file)
   var data = toArrayBuffer(rawData)

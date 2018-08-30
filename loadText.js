@@ -11,7 +11,7 @@ function loadTextBrowser (url, callback) {
           callback(null, request.responseText)
         }
       } else {
-        callback('loadText error: ' + request.statusText, null)
+        callback(new Error('loadText error: ' + request.statusText), null)
       }
     }
   }
@@ -21,7 +21,7 @@ function loadTextBrowser (url, callback) {
 function loadTextPlask (path, callback) {
   if (!fs.existsSync(path)) {
     if (callback) {
-      return callback('loadText error: File doesn\'t exist ' + '"' + path + '"', null)
+      return callback(new Error('loadText error: File doesn\'t exist ' + '"' + path + '"'), null)
     }
   }
   var data = fs.readFileSync(path, 'utf8')

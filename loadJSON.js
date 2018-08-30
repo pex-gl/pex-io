@@ -16,11 +16,11 @@ function loadJSON (file, callback) {
       try {
         json = JSON.parse(data)
       } catch (e) {
-        return callback(e.toString(), null)
+        return callback(e, null)
       }
       callback(null, json)
     }
   })
 }
 
-module.exports = loadJSON
+module.exports = promisify(loadJSON)

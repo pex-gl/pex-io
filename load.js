@@ -70,7 +70,7 @@ function load (resources, callback) {
     } else if (res.binary) {
       loadBinary(res.binary, onLoaded)
     } else {
-      onLoaded('pex-io/load unknown resource type ' + Object.keys(res), null)
+      onLoaded(new Error('pex-io/load unknown resource type ' + Object.keys(res)), null)
     }
   })
 
