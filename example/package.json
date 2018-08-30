@@ -9,8 +9,7 @@
   "author": "Marcin Ignac <marcin.ignac@gmail.com> (http://marcinignac.com/)",
   "license": "MIT",
   "dependencies": {
-    "pex-gl": "^0.2.1",
-    "regl": "^1.2.1"
+    "@thi.ng/hdom": "^3.0.35"
   },
   "devDependencies": {
     "budo": "^9.2.1"
