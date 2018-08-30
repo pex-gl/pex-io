@@ -20,6 +20,23 @@ var loadImage = require('pex-io/loadImage')
 loadImage(url, function (err, img) { })
 ```
 
+## Async
+
+From v2 all methods are async if called without callback as a second parameter. e.g.:
+
+```javascript
+loadText('hello.txt', (err, text) => {
+  console.log(text)
+})
+```
+
+Can be now written as
+
+```javascript
+const text = await loadText('hello.txt')
+console.log(text)
+```
+
 ## API
 
 ### io.load(resources, callback)
