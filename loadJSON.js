@@ -1,4 +1,5 @@
 var loadText = require('./loadText')
+var promisify = require('./utils/promisify')
 
 /**
  * Loads JSON data

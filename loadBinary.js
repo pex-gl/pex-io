@@ -1,5 +1,6 @@
 var isPlask = require('is-plask')
 var fs = require('fs')
+var promisify = require('./utils/promisify')
 
 function toArrayBuffer (buffer) {
   var ab = new ArrayBuffer(buffer.length)
@@ -56,4 +57,4 @@ function loadBinary (file, callback) {
   }
 }
 
-module.exports = loadBinary
+module.exports = promisify(loadBinary)

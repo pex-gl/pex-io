@@ -1,5 +1,6 @@
 var isPlask = require('is-plask')
 var fs = require('fs')
+var promisify = require('./utils/promisify')
 
 function loadTextBrowser (url, callback) {
   var request = new window.XMLHttpRequest()
@@ -45,4 +46,4 @@ function loadText (file, callback) {
   }
 }
 
-module.exports = loadText
+module.exports = promisify(loadText)

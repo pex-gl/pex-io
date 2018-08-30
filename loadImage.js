@@ -1,5 +1,6 @@
 var isPlask = require('is-plask')
 var plask = require('plask-wrap')
+var promisify = require('./utils/promisify')
 
 function loadImageBrowser (url, callback, crossOrigin) {
   var img = new window.Image()
@@ -55,4 +56,4 @@ function loadImage (file, callback, crossOrigin) {
   }
 }
 
-module.exports = loadImage
+module.exports = promisify(loadImage)

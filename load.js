@@ -2,7 +2,7 @@ var loadImage = require('./loadImage')
 var loadBinary = require('./loadBinary')
 var loadText = require('./loadText')
 var loadJSON = require('./loadJSON')
-
+var promisify = require('./utils/promisify')
 /**
  * Load provided resources
  * @param   {Object} resources - map of resources, see example
@@ -79,4 +79,4 @@ function load (resources, callback) {
   }
 }
 
-module.exports = load
+module.exports = promisify(load)
