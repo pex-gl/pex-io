@@ -72,7 +72,12 @@ io.loadBinary('panorama.hdr', function (err, arrayBuffer) { })
 Loads a HTML Image from an url in a Borwser or SkCanvas from a file path in Plask.
 
 ```javascript
-io.loadImage('texture.jpg', function (err, image) { })
+io.loadimage('texture.jpg', function (err, image) { })
+```
+
+How to enable CORS:
+```javascript
+io.loadimage({ url: 'texture.jpg', crossOrigin: 'anonymous' }, function (err, image) { })
 ```
 
 ### io.loadJSON(url, callback)

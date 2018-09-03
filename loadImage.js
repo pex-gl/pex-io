@@ -2,10 +2,17 @@ var isPlask = require('is-plask')
 var plask = require('plask-wrap')
 var promisify = require('./utils/promisify')
 
-function loadImageBrowser (url, callback, crossOrigin) {
+function loadImageBrowser (opts, callback) {
+  var crossOrigin = null
+  var url = opts
+  if (url.url) {
+    crossOrigin = url.crossOrigin
+    url = url.url
+  }
+
   var img = new window.Image()
   if (crossOrigin) {
-    img.crossOrigin = 'anonymous'
+    img.crossOrigin = crossOrigin
   }
   img.onerror = function () {
     callback(new Error('Failed to load ' + url), null)
