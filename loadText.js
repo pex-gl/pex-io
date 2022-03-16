@@ -1,49 +1,31 @@
-var isPlask = require('is-plask')
-var fs = require('fs')
-var promisify = require('./utils/promisify')
+import { promisify } from "./utils.js";
 
-function loadTextBrowser (url, callback) {
-  var request = new window.XMLHttpRequest()
-  request.open('GET', url, true)
-  request.onreadystatechange = function (e) {
+/**
+ * @callback textCallback
+ * @param {Error} err
+ * @param {string} text
+ */
+
+/**
+ * Loads a text file
+ * @param {string} url
+ * @param {textCallback} [callback]
+ */
+function loadText(url, callback) {
+  const request = new window.XMLHttpRequest();
+  request.open("GET", url, true);
+  request.onreadystatechange = () => {
     if (request.readyState === 4) {
       if (request.status === 200) {
         if (callback) {
-          callback(null, request.responseText)
+          callback(null, request.responseText);
         }
       } else {
-        callback(new Error('loadText error: ' + request.statusText), null)
+        callback(new Error(`loadText error: ${request.statusText}`), null);
       }
     }
-  }
-  request.send(null)
+  };
+  request.send(null);
 }
 
-function loadTextPlask (path, callback) {
-  if (!fs.existsSync(path)) {
-    if (callback) {
-      return callback(new Error('loadText error: File doesn\'t exist ' + '"' + path + '"'), null)
-    }
-  }
-  var data = fs.readFileSync(path, 'utf8')
-  if (callback) {
-    callback(null, data)
-  }
-}
-
-/**
- * @desc Loads text string
- * @param {String} file - url addess (Browser) or file path (Plask)
- * @param {Function} callback - function(err, text) { }
- * @param {Error} callback.err - error if any or null
- * @param {String} callback.text - loaded text
- */
-function loadText (file, callback) {
-  if (isPlask) {
-    loadTextPlask(file, callback)
-  } else {
-    loadTextBrowser(file, callback)
-  }
-}
-
-module.exports = promisify(loadText)
+export default promisify(loadText);

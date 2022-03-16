@@ -1,5 +1,11 @@
-.DS_Store
-node_modules
+web_modules
+examples
 docs
-out
-example
+coverage
+test
+.github
+screenshot.*
+index.html
+tsconfig.json
+.editorconfig
+assets

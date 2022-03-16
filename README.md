@@ -1,96 +1,38 @@
 # pex-io
 
-Basic file i/o for the pex library.
+[![npm version](https://img.shields.io/npm/v/pex-io)](https://www.npmjs.com/package/pex-io)
+[![stability-stable](https://img.shields.io/badge/stability-stable-green.svg)](https://www.npmjs.com/package/pex-io)
+[![npm minzipped size](https://img.shields.io/bundlephobia/minzip/pex-io)](https://bundlephobia.com/package/pex-io)
+[![dependencies](https://img.shields.io/librariesio/release/npm/pex-io)](https://github.com/pex-gl/pex-io/blob/main/package.json)
+[![types](https://img.shields.io/npm/types/pex-io)](https://github.com/microsoft/TypeScript)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fa6673.svg)](https://conventionalcommits.org)
+[![styled with prettier](https://img.shields.io/badge/styled_with-Prettier-f8bc45.svg?logo=prettier)](https://github.com/prettier/prettier)
+[![linted with eslint](https://img.shields.io/badge/linted_with-ES_Lint-4B32C3.svg?logo=eslint)](https://github.com/eslint/eslint)
+[![license](https://img.shields.io/github/license/pex-gl/pex-io)](https://github.com/pex-gl/pex-io/blob/main/LICENSE.md)
 
-Works both in [Plask](http://plask.org) and any browser.
+File I/O in [PEX](https://pex.gl).
 
-## Usage
+## Installation
 
 ```bash
 npm install pex-io
 ```
 
-```javascript
-var io = require('pex-io')
-io.loadImage(url, function (err, img) { })
+## Usage
 
-//or import functions individually
-
-var loadImage = require('pex-io/loadImage')
-loadImage(url, function (err, img) { })
-```
-
-## Async
-
-From v2 all methods are async if called without callback as a second parameter. e.g.:
-
-```javascript
-loadText('hello.txt', (err, text) => {
-  console.log(text)
-})
-```
-
-Can be now written as
-
-```javascript
-const text = await loadText('hello.txt')
-console.log(text)
+```js
+import pexIo from "pex-io";
+console.log(pexIo);
 ```
 
 ## API
 
-### io.load(resources, callback)
+<!-- api-start -->
 
-Loads list of `resources` provided as a hash map of `{ name: { type: url }}`.
+Auto-generated API content.
 
-```javascript
-var resources = {
-  hdrImg: { binary: __dirname + '/tex.hdr'}
-  img: { image: __dirname + '/tex.jpg'},
-  data: { json: __dirname + '/data.json'},
-  hello: { text: __dirname + '/hello.txt'}
-}
+<!-- api-end -->
 
-io.load(resources, function(err, res) {
-    res.hdrImg //{ArrayBuffer}
-    res.img    //{Image} in a Browser or {SkCanvas} in Plask
-    res.data   //{JSON}
-    res.hello  //{String}
-})
-```
+## License
 
-### io.loadBinary(url, callback)
-
-Loads binary data as an ArrayBuffer from `url` addess in a Browser or file path in Plask. 
-
-```javascript
-io.loadBinary('panorama.hdr', function (err, arrayBuffer) { })
-```
-
-### io.loadImage(url, callback)
-
-Loads a HTML Image from an url in a Borwser or SkCanvas from a file path in Plask.
-
-```javascript
-io.loadimage('texture.jpg', function (err, image) { })
-```
-
-How to enable CORS:
-```javascript
-io.loadimage({ url: 'texture.jpg', crossOrigin: 'anonymous' }, function (err, image) { })
-```
-
-### io.loadJSON(url, callback)
-Loads a JSON file from an url url in a Browser of from a file path in Plask.
-
-```javascript
-io.loadJSON('data.json', function (err, json) { })
-```
-
-### io.loadText(url, callback)
-
-Loads a text file from an url url in a Browser of from a file path in Plask.
-
-```javascript
-io.loadJSON('data.csv', function (err, string) { })
-```
+MIT. See [license file](https://github.com/pex-gl/pex-io/blob/main/LICENSE.md).

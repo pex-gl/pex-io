@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>pex-io by pex-gl (https://github.com/pex-gl)</title>
+    <style>
+      :root {
+        --color-dark: #404040;
+        --color-light: #f2f2f2;
+        --color-accent: #fd5e62;
+      }
+
+      body {
+        margin: 0;
+        overscroll-behavior: none;
+        font-family: sans-serif;
+        color: var(--color-dark);
+        background-color: var(--color-light);
+      }
+
+      main {
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>pex-io</h1>
+      <div class="Result"></div>
+    </main>
+    <script async src="web_modules/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "hdom": "./web_modules/@thi.ng/hdom.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import io from "./index.js";
+      import * as hdom from "hdom";
+
+      const ASSETS = {
+        text: "assets/hello.txt",
+        json: "assets/color.json",
+        image: "assets/pex.png",
+        binary: "assets/data.bin",
+      };
+
+      const assetState = { text: null, json: null, image: null, binary: null };
+
+      const state = {
+        callback: { ...assetState },
+        callbackBatch: { ...assetState },
+        async: { ...assetState },
+        asyncBatch: { ...assetState },
+      };
+
+      const app = () => () => {
+        return [
+          "div",
+          { style: { display: "flex", gap: "60px" } },
+          Object.keys(state).map((technique) => [
+            "div",
+            ["h2", technique],
+            Object.keys(state[technique]).map((itemName) => {
+              let value = state[technique][itemName];
+              if (!value) value = "loading...";
+              if (value.color) value = JSON.stringify(value);
+              if (value instanceof Image) value = ["img", { src: value.src }];
+              if (value instanceof ArrayBuffer)
+                value = `ArrayBuffer ${value.byteLength} bytes`;
+              return ["div", ["h3", itemName], value];
+            }),
+          ]),
+        ];
+      };
+
+      hdom.start(app(), { root: document.querySelector(".Result") });
+
+      // callback
+      (() => {
+        io.loadText(ASSETS.text, (err, text) => {
+          if (err) return console.log(err);
+          state.callback.text = text;
+        });
+
+        io.loadJSON(ASSETS.json, (err, json) => {
+          if (err) return console.log(err);
+          state.callback.json = json;
+        });
+
+        io.loadImage(ASSETS.image, (err, image) => {
+          if (err) return console.log(err);
+          state.callback.image = image;
+        });
+
+        io.loadBinary(ASSETS.binary, (err, data) => {
+          if (err) return console.log(err);
+          state.callback.binary = data;
+        });
+      })();
+
+      // callback batch
+      (() => {
+        io.load(
+          {
+            hello: { text: ASSETS.text },
+            color: { json: ASSETS.json },
+            pex: { image: ASSETS.image },
+            data: { binary: ASSETS.binary },
+          },
+          (err, res) => {
+            if (err) return console.log(err);
+            state.callbackBatch.text = res.hello;
+            state.callbackBatch.json = res.color;
+            state.callbackBatch.image = res.pex;
+            state.callbackBatch.binary = res.data;
+          }
+        );
+      })();
+
+      // async
+      (async () => {
+        state.async.text = await io.loadText(ASSETS.text);
+        state.async.json = await io.loadJSON(ASSETS.json);
+        state.async.image = await io.loadImage(ASSETS.image);
+        state.async.binary = await io.loadBinary(ASSETS.json);
+      })();
+
+      // async batch
+      (async () => {
+        const res = await io.load({
+          hello: { text: ASSETS.text },
+          color: { json: ASSETS.json },
+          pex: { image: ASSETS.image },
+          data: { binary: ASSETS.binary },
+        });
+        state.asyncBatch.text = res.hello;
+        state.asyncBatch.json = res.color;
+        state.asyncBatch.image = res.pex;
+        state.asyncBatch.binary = res.data;
+      })();
+    </script>
+  </body>
+</html>

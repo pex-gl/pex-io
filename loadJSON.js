@@ -1,27 +1,31 @@
-var loadText = require('./loadText')
-var promisify = require('./utils/promisify')
+import loadText from "./loadText.js";
+import { promisify } from "./utils.js";
+
+/**
+ * @callback jsonCallback
+ * @param {Error} err
+ * @param {string} json
+ */
 
 /**
  * Loads JSON data
- * @param {String} file - url addess (Browser) or file path (Plask)
- * @param {Function} callback - function(err, json) { }
- * @param {Error} callback.err - error if any or null
- * @param {String} callback.json - loaded JSON data
+ * @param {string} file
+ * @param {jsonCallback} callback
  */
-function loadJSON (file, callback) {
-  loadText(file, function (err, data) {
+function loadJSON(file, callback) {
+  loadText(file, (err, data) => {
     if (err) {
-      callback(err, null)
+      callback(err, null);
     } else {
-      var json = null
+      let json = null;
       try {
-        json = JSON.parse(data)
+        json = JSON.parse(data);
       } catch (e) {
-        return callback(e, null)
+        return callback(e, null);
       }
-      callback(null, json)
+      callback(null, json);
     }
-  })
+  });
 }
 
-module.exports = promisify(loadJSON)
+export default promisify(loadJSON);

@@ -1,29 +1,35 @@
 {
   "name": "pex-io",
   "version": "2.1.0",
-  "description": "Basic file i/o for the pex library",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pex-gl/pex-io.git"
-  },
+  "description": "File I/O in PEX.",
   "keywords": [
     "pex",
+    "io",
     "webgl",
-    "io"
+    "3d",
+    "text",
+    "json",
+    "image",
+    "binary"
   ],
-  "author": {
-    "name": "Marcin Ignac",
-    "email": "marcin.ignac@gmail.com",
-    "url": "http://marcinignac.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pex-gl/pex-io/issues"
-  },
   "homepage": "https://github.com/pex-gl/pex-io",
-  "dependencies": {
-    "is-plask": "^1.1.0",
-    "plask-wrap": "^1.0.0"
+  "bugs": "https://github.com/pex-gl/pex-io/issues",
+  "repository": "pex-gl/pex-io",
+  "license": "MIT",
+  "author": "Marcin Ignac <marcin.ignac@gmail.com> (http://marcinignac.com)",
+  "contributors": [
+    "Damien Seguin (https://github.com/dmnsgn)"
+  ],
+  "type": "module",
+  "exports": "./index.js",
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "devDependencies": {
+    "@thi.ng/hdom": "^9.1.5",
+    "es-module-shims": "^1.4.7"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
   }
 }

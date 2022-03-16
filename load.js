@@ -1,10 +1,11 @@
-var loadImage = require('./loadImage')
-var loadBinary = require('./loadBinary')
-var loadText = require('./loadText')
-var loadJSON = require('./loadJSON')
-var promisify = require('./utils/promisify')
+import loadImage from "./loadImage.js";
+import loadBinary from "./loadBinary.js";
+import loadText from "./loadText.js";
+import loadJSON from "./loadJSON.js";
+import { promisify } from "./utils.js";
+
 /**
- * Load provided resources
+ * Loads provided resources
  * @param   {Object} resources - map of resources, see example
  * @param   {Function} callback function(err, resources), see example
  * @returns {Object}   - with same properties are resource list but resolved to the actual data
@@ -20,63 +21,66 @@ var promisify = require('./utils/promisify')
  *   res.img    //{Image} in a Browser or {SkCanvas} in Plask
  *   res.hdrImg //{ArrayBuffer}
  *   res.data   //{JSON}
- *   res.hello  //{String}
+ *   res.hello  //{string}
  * })
  */
-function load (resources, callback) {
-  var results = {}
-  var errors = {}
-  var hadErrors = false
+function load(resources, callback) {
+  const results = {};
+  const errors = {};
+  let hadErrors = false;
 
   // TODO: use `async` module instead?
-  var loadedResources = 0
-  var resourceNames = Object.keys(resources)
-  var numResources = resourceNames.length
+  let loadedResources = 0;
+  const resourceNames = Object.keys(resources);
+  const numResources = resourceNames.length;
 
-  function onFinish () {
+  function onFinish() {
     try {
       if (hadErrors) {
-        callback(errors, null)
+        callback(errors, null);
       } else {
-        callback(null, results)
+        callback(null, results);
       }
     } catch (e) {
-      console.log(e)
-      console.log(e.stack)
+      console.log(e);
+      console.log(e.stack);
     }
   }
 
-  resourceNames.forEach(function (name) {
-    function onLoaded (err, data) {
+  resourceNames.forEach((name) => {
+    function onLoaded(err, data) {
       if (err) {
-        hadErrors = true
-        errors[name] = err
+        hadErrors = true;
+        errors[name] = err;
       } else {
-        results[name] = data
+        results[name] = data;
       }
 
       if (++loadedResources === numResources) {
-        onFinish()
+        onFinish();
       }
     }
 
-    var res = resources[name]
+    const res = resources[name];
     if (res.image) {
-      loadImage(res.image, onLoaded)
+      loadImage(res.image, onLoaded);
     } else if (res.text) {
-      loadText(res.text, onLoaded)
+      loadText(res.text, onLoaded);
     } else if (res.json) {
-      loadJSON(res.json, onLoaded)
+      loadJSON(res.json, onLoaded);
     } else if (res.binary) {
-      loadBinary(res.binary, onLoaded)
+      loadBinary(res.binary, onLoaded);
     } else {
-      onLoaded(new Error('pex-io/load unknown resource type ' + Object.keys(res)), null)
+      onLoaded(
+        new Error(`pex-io/load unknown resource type ${Object.keys(res)}`),
+        null
+      );
     }
-  })
+  });
 
   if (resourceNames.length === 0) {
-    onFinish()
+    onFinish();
   }
 }
 
-module.exports = promisify(load)
+export default promisify(load);
