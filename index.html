@@ -59,15 +59,15 @@
         async: { ...assetState },
         "async-batch": { ...assetState },
         error: { ...assetState, error: null },
+        "image-options": { all: null, readOnly: null, urlOnly: null },
       };
 
       const app = () => () => {
         return [
           "div",
-          { style: { display: "flex", gap: "60px" } },
+          { style: { display: "flex", "flex-wrap": "wrap", gap: "60px" } },
           Object.keys(state).map((technique) => [
             "div",
-            { style: { "flex-basis": "100%" } },
             ["h2", technique],
             Object.keys(state[technique]).map((itemName) => {
               let value = state[technique][itemName];
@@ -123,8 +123,7 @@
             state["callback-batch"].json = res.color;
             state["callback-batch"].image = res.pex;
             state["callback-batch"].binary = res.data;
-            if (err)
-              return console.log("callback batch", filterResultsErrors(err));
+            if (err) console.log("callback batch", filterResultsErrors(err));
           }
         );
       })();
@@ -197,7 +196,52 @@
         });
         io.load({ errorUnknownType: { foo: "bar" } }, (err, res) => {
           state.error.error = res.errorUnknownType;
-          if (err) return console.log("error", filterResultsErrors(err));
+          if (err) console.log("error", filterResultsErrors(err));
+        });
+      })();
+
+      // Image option
+      const printImageAttributes = (image) =>
+        Array.from(image.attributes)
+          .map((a) => a.name)
+          .join(", ");
+
+      (() => {
+        io.loadImage(
+          {
+            url: ASSETS.image,
+
+            alt: "Image Options",
+            crossOrigin: "anonymous",
+            decoding: "async",
+            height: 20,
+            isMap: false,
+            loading: "eager",
+            referrerPolicy: "no-referrer",
+            sizes: "(max-width: 600px) 480px, 800px",
+            src: "bogus",
+            srcset: `${ASSETS.image} 1x, ${ASSETS.image} 2x`,
+            useMap: false,
+            width: 20,
+          },
+          (err, image) => {
+            state["image-options"].all =
+              err || image + printImageAttributes(image);
+
+            if (err) console.log("image option", err);
+          }
+        );
+        io.loadImage({ url: ASSETS.image, complete: true }, (err, image) => {
+          state["image-options"].readOnly =
+            err || image + printImageAttributes(image);
+
+          if (err) console.log("image option", err);
+        });
+        io.loadImage({ url: ASSETS.image }, (err, image) => {
+          state["image-options"].urlOnly =
+            err || image + printImageAttributes(image);
+
+          if (err) console.log("image option", err);
         });
       })();
     </script>

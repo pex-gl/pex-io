@@ -62,7 +62,7 @@ function load(resources, callback) {
       return Promise.reject(
         new Error(
           `io.load: unknown resource type "${Object.keys(res)}".
-Resource needs one of ${LOADERS_MAP_KEYS}`
+Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`
         )
       );
     })
