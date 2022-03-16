@@ -19,7 +19,7 @@ function loadImage(opts, callback) {
     url = url.url;
   }
 
-  const img = new window.Image();
+  const img = new Image();
   if (crossOrigin) {
     img.crossOrigin = crossOrigin;
   }

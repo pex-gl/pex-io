@@ -12,7 +12,7 @@ import { promisify } from "./utils.js";
  * @param {textCallback} [callback]
  */
 function loadText(url, callback) {
-  const request = new window.XMLHttpRequest();
+  const request = new XMLHttpRequest();
   request.open("GET", url, true);
   request.onreadystatechange = () => {
     if (request.readyState === 4) {

@@ -12,7 +12,7 @@ import { promisify } from "./utils.js";
  * @param {binaryCallback} callback
  */
 function loadBinary(url, callback) {
-  const request = new window.XMLHttpRequest();
+  const request = new XMLHttpRequest();
   request.open("GET", url, true);
   request.responseType = "arraybuffer";
   request.onreadystatechange = () => {
