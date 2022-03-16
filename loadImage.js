@@ -7,9 +7,9 @@ import { promisify } from "./utils.js";
  */
 
 /**
- * @typedef ImageOptions
+ * @typedef {Object} ImageOptions
  * @param {string} url
- * @param {...*} rest
+ * @param {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties|HTMLImageElement#properties}
  */
 
 /**

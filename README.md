@@ -29,7 +29,208 @@ console.log(pexIo);
 
 <!-- api-start -->
 
-Auto-generated API content.
+## Functions
+
+<dl>
+<dt><a href="#load">load(resources, callback)</a></dt>
+<dd><p>Loads resources from a named map</p>
+</dd>
+<dt><a href="#loadBinary">loadBinary(file, [callback])</a></dt>
+<dd><p>Loads binary data</p>
+</dd>
+<dt><a href="#loadImage">loadImage(urlOrOpts, [callback])</a></dt>
+<dd><p>Loads a HTML Image</p>
+</dd>
+<dt><a href="#loadJSON">loadJSON(url, [callback])</a></dt>
+<dd><p>Loads JSON data</p>
+</dd>
+<dt><a href="#loadText">loadText(url, [callback])</a></dt>
+<dd><p>Loads a text file</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#Resource">Resource</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#resourceCallback">resourceCallback</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#binaryCallback">binaryCallback</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#imageCallback">imageCallback</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#ImageOptions">ImageOptions</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#jsonCallback">jsonCallback</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#textCallback">textCallback</a> : <code>function</code></dt>
+<dd></dd>
+</dl>
+
+<a name="load"></a>
+
+## load(resources, callback)
+
+Loads resources from a named map
+
+**Kind**: global function
+
+| Param     | Type                                               |
+| --------- | -------------------------------------------------- |
+| resources | <code>Object.&lt;string, Resource&gt;</code>       |
+| callback  | [<code>resourceCallback</code>](#resourceCallback) |
+
+**Example**
+
+```js
+const resources = {
+  hello: { text: "assets/hello.txt" },
+  data: { json: "assets/data.json" },
+  img: { image: "assets/tex.jpg" },
+  hdrImg: { binary: "assets/tex.hdr" },
+};
+
+io.load(resources, (err, res) => {
+  res.hello; // => String
+  res.data; // => Object
+  res.img; // => HTMLImageElement
+  res.hdrImg; // => ArrayBuffer
+  if (err) return console.log(err);
+});
+```
+
+<a name="loadBinary"></a>
+
+## loadBinary(file, [callback])
+
+Loads binary data
+
+**Kind**: global function
+
+| Param      | Type                                           |
+| ---------- | ---------------------------------------------- |
+| file       | <code>string</code>                            |
+| [callback] | [<code>binaryCallback</code>](#binaryCallback) |
+
+<a name="loadImage"></a>
+
+## loadImage(urlOrOpts, [callback])
+
+Loads a HTML Image
+
+**Kind**: global function
+
+| Param      | Type                                                              |
+| ---------- | ----------------------------------------------------------------- |
+| urlOrOpts  | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
+| [callback] | [<code>imageCallback</code>](#imageCallback)                      |
+
+<a name="loadJSON"></a>
+
+## loadJSON(url, [callback])
+
+Loads JSON data
+
+**Kind**: global function
+
+| Param      | Type                                       |
+| ---------- | ------------------------------------------ |
+| url        | <code>string</code>                        |
+| [callback] | [<code>jsonCallback</code>](#jsonCallback) |
+
+<a name="loadText"></a>
+
+## loadText(url, [callback])
+
+Loads a text file
+
+**Kind**: global function
+
+| Param      | Type                                       |
+| ---------- | ------------------------------------------ |
+| url        | <code>string</code>                        |
+| [callback] | [<code>textCallback</code>](#textCallback) |
+
+<a name="Resource"></a>
+
+## Resource : <code>Object</code>
+
+**Kind**: global typedef
+**Properties**
+
+| Name     | Type                |
+| -------- | ------------------- |
+| [text]   | <code>string</code> |
+| [json]   | <code>string</code> |
+| [image]  | <code>string</code> |
+| [binary] | <code>string</code> |
+
+<a name="resourceCallback"></a>
+
+## resourceCallback : <code>function</code>
+
+**Kind**: global typedef
+
+| Param | Type                                                                                |
+| ----- | ----------------------------------------------------------------------------------- |
+| err   | <code>Error</code>                                                                  |
+| res   | <code>Object.&lt;string, (string\|Object\|HTMLImageElement\|ArrayBuffer)&gt;</code> |
+
+<a name="binaryCallback"></a>
+
+## binaryCallback : <code>function</code>
+
+**Kind**: global typedef
+
+| Param | Type                     |
+| ----- | ------------------------ |
+| err   | <code>Error</code>       |
+| data  | <code>ArrayBuffer</code> |
+
+<a name="imageCallback"></a>
+
+## imageCallback : <code>function</code>
+
+**Kind**: global typedef
+
+| Param | Type                          |
+| ----- | ----------------------------- |
+| err   | <code>Error</code>            |
+| image | <code>HTMLImageElement</code> |
+
+<a name="ImageOptions"></a>
+
+## ImageOptions : <code>Object</code>
+
+**Kind**: global typedef
+
+| Param   | Type                | Description                                                                                                 |
+| ------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| url     | <code>string</code> |                                                                                                             |
+| ...rest | <code>\*</code>     | [HTMLImageElement#properties](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties) |
+
+<a name="jsonCallback"></a>
+
+## jsonCallback : <code>function</code>
+
+**Kind**: global typedef
+
+| Param | Type                |
+| ----- | ------------------- |
+| err   | <code>Error</code>  |
+| json  | <code>string</code> |
+
+<a name="textCallback"></a>
+
+## textCallback : <code>function</code>
+
+**Kind**: global typedef
+
+| Param | Type                |
+| ----- | ------------------- |
+| err   | <code>Error</code>  |
+| text  | <code>string</code> |
 
 <!-- api-end -->
 
