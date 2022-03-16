@@ -24,7 +24,7 @@ function loadImage(opts, callback) {
     img.crossOrigin = crossOrigin;
   }
   img.onerror = () => {
-    callback(new Error(`io.loadImage: Failed to load ${url}`), null);
+    callback(new Error(`io.loadImage: load error ${url}`), null);
   };
   img.onload = () => {
     callback(null, img);

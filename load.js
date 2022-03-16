@@ -1,86 +1,80 @@
-import loadImage from "./loadImage.js";
-import loadBinary from "./loadBinary.js";
 import loadText from "./loadText.js";
 import loadJSON from "./loadJSON.js";
+import loadImage from "./loadImage.js";
+import loadBinary from "./loadBinary.js";
 import { promisify } from "./utils.js";
 
 /**
- * Loads provided resources
- * @param   {Object} resources - map of resources, see example
- * @param   {Function} callback function(err, resources), see example
- * @returns {Object}   - with same properties are resource list but resolved to the actual data
+ * @private
+ */
+const LOADERS_MAP = {
+  text: loadText,
+  json: loadJSON,
+  image: loadImage,
+  binary: loadBinary,
+};
+const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
+
+/**
+ * @typedef {Object} Resource
+ * @property {string} [text]
+ * @property {string} [json]
+ * @property {string} [image]
+ * @property {string} [binary]
+ */
+
+/**
+ * @callback resourceCallback
+ * @param {Error} err
+ * @param {Object.<string, string | Object | HTMLImageElement | ArrayBuffer>} res
+ */
+
+/**
+ * Loads resources from a named map
+ * @param {Object.<string, Resource>} resources
+ * @param {resourceCallback} callback
  *
  * @example
- * var resources = {
- *   img     : { image: __dirname + '/tex.jpg'},
- *   hdrImg  : { binary: __dirname + '/tex.hdr'}
- *   data    : { json: __dirname + '/data.json'},
- *   hello   : { text: __dirname + '/hello.txt'}
- * }
- * load(resources, function(err, res) {
- *   res.img    //{Image} in a Browser or {SkCanvas} in Plask
- *   res.hdrImg //{ArrayBuffer}
- *   res.data   //{JSON}
- *   res.hello  //{string}
- * })
+ * const resources = {
+ *   hello: { text: "assets/hello.txt" },
+ *   data: { json: "assets/data.json" },
+ *   img: { image: "assets/tex.jpg" },
+ *   hdrImg: { binary: "assets/tex.hdr" },
+ * };
+ *
+ * io.load(resources, (err, res) => {
+ *   res.hello; // => String
+ *   res.data; // => Object
+ *   res.img; // => HTMLImageElement
+ *   res.hdrImg; // => ArrayBuffer
+ *   if (err) return console.log(err);
+ * });
  */
 function load(resources, callback) {
-  const results = {};
-  const errors = {};
-  let hadErrors = false;
+  const names = Object.keys(resources);
 
-  // TODO: use `async` module instead?
-  let loadedResources = 0;
-  const resourceNames = Object.keys(resources);
-  const numResources = resourceNames.length;
+  Promise.allSettled(
+    names.map(async (name) => {
+      const res = resources[name];
 
-  function onFinish() {
-    try {
-      if (hadErrors) {
-        callback(errors, null);
-      } else {
-        callback(null, results);
-      }
-    } catch (e) {
-      console.log(e);
-      console.log(e.stack);
-    }
-  }
-
-  resourceNames.forEach((name) => {
-    function onLoaded(err, data) {
-      if (err) {
-        hadErrors = true;
-        errors[name] = err;
-      } else {
-        results[name] = data;
-      }
-
-      if (++loadedResources === numResources) {
-        onFinish();
-      }
-    }
-
-    const res = resources[name];
-    if (res.image) {
-      loadImage(res.image, onLoaded);
-    } else if (res.text) {
-      loadText(res.text, onLoaded);
-    } else if (res.json) {
-      loadJSON(res.json, onLoaded);
-    } else if (res.binary) {
-      loadBinary(res.binary, onLoaded);
-    } else {
-      onLoaded(
-        new Error(`pex-io/load unknown resource type ${Object.keys(res)}`),
-        null
+      const loader = LOADERS_MAP_KEYS.find((loader) => res[loader]);
+      if (loader) return await LOADERS_MAP[loader](res[loader]);
+      return Promise.reject(
+        new Error(`io.load: unknown resource type ${Object.keys(res)}`)
       );
-    }
+    })
+  ).then((values) => {
+    const results = Object.fromEntries(
+      Array.from(
+        values.map((v) => v.value || v.reason),
+        (v, i) => [names[i], v]
+      )
+    );
+    callback(
+      values.find((v) => v.status === "rejected") ? results : null,
+      results
+    );
   });
-
-  if (resourceNames.length === 0) {
-    onFinish();
-  }
 }
 
 export default promisify(load);

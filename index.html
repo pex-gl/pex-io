@@ -48,15 +48,17 @@
         json: "assets/color.json",
         image: "assets/pex.png",
         binary: "assets/data.bin",
+        errorNotFound: "assets/not-found.ext",
       };
 
       const assetState = { text: null, json: null, image: null, binary: null };
 
       const state = {
         callback: { ...assetState },
-        callbackBatch: { ...assetState },
+        "callback-batch": { ...assetState },
         async: { ...assetState },
-        asyncBatch: { ...assetState },
+        "async-batch": { ...assetState },
+        error: { ...assetState, error: null },
       };
 
       const app = () => () => {
@@ -65,6 +67,7 @@
           { style: { display: "flex", gap: "60px" } },
           Object.keys(state).map((technique) => [
             "div",
+            { style: { "flex-basis": "100%" } },
             ["h2", technique],
             Object.keys(state[technique]).map((itemName) => {
               let value = state[technique][itemName];
@@ -81,26 +84,28 @@
 
       hdom.start(app(), { root: document.querySelector(".Result") });
 
+      const filterResultsErrors = (results) =>
+        Object.fromEntries(
+          Object.entries(results).filter(([_, v]) => v instanceof Error)
+        );
+
       // callback
       (() => {
         io.loadText(ASSETS.text, (err, text) => {
-          if (err) return console.log(err);
-          state.callback.text = text;
+          state.callback.text = err || text;
+          if (err) console.log("callback", err);
         });
-
         io.loadJSON(ASSETS.json, (err, json) => {
-          if (err) return console.log(err);
-          state.callback.json = json;
+          state.callback.json = err || json;
+          if (err) console.log("callback", err);
         });
-
         io.loadImage(ASSETS.image, (err, image) => {
-          if (err) return console.log(err);
-          state.callback.image = image;
+          state.callback.image = err || image;
+          if (err) console.log("callback", err);
         });
-
         io.loadBinary(ASSETS.binary, (err, data) => {
-          if (err) return console.log(err);
-          state.callback.binary = data;
+          state.callback.binary = err || data;
+          if (err) console.log("callback", err);
         });
       })();
 
@@ -114,35 +119,86 @@
             data: { binary: ASSETS.binary },
           },
           (err, res) => {
-            if (err) return console.log(err);
-            state.callbackBatch.text = res.hello;
-            state.callbackBatch.json = res.color;
-            state.callbackBatch.image = res.pex;
-            state.callbackBatch.binary = res.data;
+            state["callback-batch"].text = res.hello;
+            state["callback-batch"].json = res.color;
+            state["callback-batch"].image = res.pex;
+            state["callback-batch"].binary = res.data;
+            if (err)
+              return console.log("callback batch", filterResultsErrors(err));
           }
         );
       })();
 
       // async
       (async () => {
-        state.async.text = await io.loadText(ASSETS.text);
-        state.async.json = await io.loadJSON(ASSETS.json);
-        state.async.image = await io.loadImage(ASSETS.image);
-        state.async.binary = await io.loadBinary(ASSETS.json);
+        try {
+          state.async.text = await io.loadText(ASSETS.text);
+        } catch (error) {
+          state.async.text = error;
+          console.log("async/await", error);
+        }
+        try {
+          state.async.json = await io.loadJSON(ASSETS.json);
+        } catch (error) {
+          state.async.json = error;
+          console.log("async/await", error);
+        }
+        try {
+          state.async.image = await io.loadImage(ASSETS.image);
+        } catch (error) {
+          state.async.image = error;
+          console.log("async/await", error);
+        }
+        try {
+          state.async.binary = await io.loadBinary(ASSETS.binary);
+        } catch (error) {
+          state.async.binary = error;
+          console.log("async/await", error);
+        }
       })();
 
       // async batch
       (async () => {
-        const res = await io.load({
-          hello: { text: ASSETS.text },
-          color: { json: ASSETS.json },
-          pex: { image: ASSETS.image },
-          data: { binary: ASSETS.binary },
+        let res;
+        try {
+          res = await io.load({
+            hello: { text: ASSETS.text },
+            color: { json: ASSETS.json },
+            pex: { image: ASSETS.image },
+            data: { binary: ASSETS.binary },
+          });
+        } catch (err) {
+          res = err;
+          console.log("async/await batch", filterResultsErrors(err));
+        }
+        state["async-batch"].text = res.hello;
+        state["async-batch"].json = res.color;
+        state["async-batch"].image = res.pex;
+        state["async-batch"].binary = res.data;
+      })();
+
+      // Error
+      (() => {
+        io.loadText(ASSETS.errorNotFound, (err, text) => {
+          state.error.text = err || text;
+          if (err) console.log("error", err);
         });
-        state.asyncBatch.text = res.hello;
-        state.asyncBatch.json = res.color;
-        state.asyncBatch.image = res.pex;
-        state.asyncBatch.binary = res.data;
+        io.loadJSON(ASSETS.errorNotFound, (err, json) => {
+          state.error.json = err || json;
+          if (err) console.log("error", err);
+        });
+        io.loadImage(ASSETS.errorNotFound, (err, image) => {
+          state.error.image = err || image;
+          if (err) console.log("error", err);
+        });
+        io.loadBinary(ASSETS.errorNotFound, (err, data) => {
+          state.error.binary = err || data;
+          if (err) console.log("error", err);
+        });
+        io.load({ errorUnknownType: { foo: "bar" } }, (err, res) => {
+          state.error.error = res.errorUnknownType;
+          if (err) return console.log("error", filterResultsErrors(err));
+        });
       })();
     </script>
   </body>
