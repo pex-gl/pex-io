@@ -1,5 +1,4 @@
-import loadText from "./loadText.js";
-import { promisify } from "./utils.js";
+import { xhrGet, promisify } from "./utils.js";
 
 /**
  * @callback jsonCallback
@@ -9,21 +8,15 @@ import { promisify } from "./utils.js";
 
 /**
  * Loads JSON data
- * @param {string} file
- * @param {jsonCallback} callback
+ * @param {string} url
+ * @param {jsonCallback} [callback]
  */
-function loadJSON(file, callback) {
-  loadText(file, (err, data) => {
-    if (err) {
-      callback(err, null);
+function loadJSON(url, callback) {
+  xhrGet(url, "json", (request) => {
+    if (request.status === 200) {
+      if (callback) callback(null, request.response);
     } else {
-      let json = null;
-      try {
-        json = JSON.parse(data);
-      } catch (e) {
-        return callback(e, null);
-      }
-      callback(null, json);
+      callback(new Error(`io.loadJSON: ${request.statusText} "${url}"`), null);
     }
   });
 }

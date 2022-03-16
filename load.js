@@ -60,7 +60,10 @@ function load(resources, callback) {
       const loader = LOADERS_MAP_KEYS.find((loader) => res[loader]);
       if (loader) return await LOADERS_MAP[loader](res[loader]);
       return Promise.reject(
-        new Error(`io.load: unknown resource type ${Object.keys(res)}`)
+        new Error(
+          `io.load: unknown resource type "${Object.keys(res)}".
+Resource needs one of ${LOADERS_MAP_KEYS}`
+        )
       );
     })
   ).then((values) => {

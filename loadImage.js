@@ -8,8 +8,8 @@ import { promisify } from "./utils.js";
 
 /**
  * Loads a HTML Image
- * @param {string} file
- * @param {imageCallback} callback
+ * @param {string | { url: string; crossOrigin: string }} opts
+ * @param {imageCallback} [callback]
  */
 function loadImage(opts, callback) {
   let crossOrigin = null;
@@ -20,11 +20,9 @@ function loadImage(opts, callback) {
   }
 
   const img = new Image();
-  if (crossOrigin) {
-    img.crossOrigin = crossOrigin;
-  }
+  if (crossOrigin) img.crossOrigin = crossOrigin;
   img.onerror = () => {
-    callback(new Error(`io.loadImage: load error ${url}`), null);
+    callback(new Error(`io.loadImage: Load Error "${url}"`), null);
   };
   img.onload = () => {
     callback(null, img);

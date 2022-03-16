@@ -1,4 +1,4 @@
-import { promisify } from "./utils.js";
+import { xhrGet, promisify } from "./utils.js";
 
 /**
  * @callback textCallback
@@ -12,20 +12,13 @@ import { promisify } from "./utils.js";
  * @param {textCallback} [callback]
  */
 function loadText(url, callback) {
-  const request = new XMLHttpRequest();
-  request.open("GET", url, true);
-  request.onreadystatechange = () => {
-    if (request.readyState === 4) {
-      if (request.status === 200) {
-        if (callback) {
-          callback(null, request.responseText);
-        }
-      } else {
-        callback(new Error(`io.loadText: ${request.statusText}`), null);
-      }
+  xhrGet(url, "", (request) => {
+    if (request.status === 200) {
+      if (callback) callback(null, request.responseText);
+    } else {
+      callback(new Error(`io.loadText: ${request.statusText} "${url}"`), null);
     }
-  };
-  request.send(null);
+  });
 }
 
 export default promisify(loadText);

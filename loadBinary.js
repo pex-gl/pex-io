@@ -1,4 +1,4 @@
-import { promisify } from "./utils.js";
+import { xhrGet, promisify } from "./utils.js";
 
 /**
  * @callback binaryCallback
@@ -9,22 +9,16 @@ import { promisify } from "./utils.js";
 /**
  * Loads binary data
  * @param {string} file
- * @param {binaryCallback} callback
+ * @param {binaryCallback} [callback]
  */
 function loadBinary(url, callback) {
-  const request = new XMLHttpRequest();
-  request.open("GET", url, true);
-  request.responseType = "arraybuffer";
-  request.onreadystatechange = () => {
-    if (request.readyState === 4) {
-      if (request.status === 200) {
-        callback(null, request.response);
-      } else {
-        callback(new Error(`io.loadBinary: ${request.response}`), null);
-      }
+  xhrGet(url, "arraybuffer", (request) => {
+    if (request.status === 200) {
+      if (callback) callback(null, request.response);
+    } else {
+      callback(new Error(`io.loadBinary: ${request.statusText} "${url}"`), null);
     }
-  };
-  request.send(null);
+  });
 }
 
 export default promisify(loadBinary);
