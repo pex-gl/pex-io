@@ -21,7 +21,7 @@ function loadText(url, callback) {
           callback(null, request.responseText);
         }
       } else {
-        callback(new Error(`loadText error: ${request.statusText}`), null);
+        callback(new Error(`io.loadText: ${request.statusText}`), null);
       }
     }
   };

@@ -20,7 +20,7 @@ function loadBinary(url, callback) {
       if (request.status === 200) {
         callback(null, request.response);
       } else {
-        callback(new Error(`loadBinary error: ${request.response}`), null);
+        callback(new Error(`io.loadBinary: ${request.response}`), null);
       }
     }
   };
