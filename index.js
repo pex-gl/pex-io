@@ -1,13 +1,5 @@
-import load from "./load.js";
-import loadText from "./loadText.js";
-import loadJSON from "./loadJSON.js";
-import loadImage from "./loadImage.js";
-import loadBinary from "./loadBinary.js";
-
-export default {
-  load,
-  loadText,
-  loadJSON,
-  loadImage,
-  loadBinary,
-};
+export { default as load } from "./load.js";
+export { default as loadText } from "./loadText.js";
+export { default as loadJSON } from "./loadJSON.js";
+export { default as loadImage } from "./loadImage.js";
+export { default as loadBinary } from "./loadBinary.js";
