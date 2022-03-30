@@ -10,6 +10,7 @@ import { xhrGet, promisify } from "./utils.js";
  * Loads binary data
  * @param {string} file
  * @param {binaryCallback} [callback]
+ * @returns {Promise<ArrayBuffer> | undefined}
  */
 function loadBinary(url, callback) {
   xhrGet(url, "arraybuffer", (request) => {

@@ -3,13 +3,14 @@ import { xhrGet, promisify } from "./utils.js";
 /**
  * @callback jsonCallback
  * @param {Error} err
- * @param {string} json
+ * @param {Object} json
  */
 
 /**
  * Loads JSON data
  * @param {string} url
  * @param {jsonCallback} [callback]
+ * @returns {Promise<Object> | undefined}
  */
 function loadJSON(url, callback) {
   xhrGet(url, "json", (request) => {

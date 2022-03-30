@@ -16,6 +16,7 @@ import { promisify } from "./utils.js";
  * Loads a HTML Image
  * @param {string | ImageOptions} urlOrOpts
  * @param {imageCallback} [callback]
+ * @returns {Promise<HTMLImageElement> | undefined}
  */
 function loadImage(urlOrOpts, callback) {
   const img = new Image();

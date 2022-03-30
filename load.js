@@ -22,17 +22,21 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * @property {string} [image]
  * @property {string} [binary]
  */
+/**
+ * @typedef {DOMString | Object | HTMLImageElement | ArrayBuffer} LoadedResource
+ */
 
 /**
  * @callback resourceCallback
  * @param {Error} err
- * @param {Object.<string, string | Object | HTMLImageElement | ArrayBuffer>} res
+ * @param {Object.<string, LoadedResource>} res
  */
 
 /**
  * Loads resources from a named map
  * @param {Object.<string, Resource>} resources
  * @param {resourceCallback} callback
+ * @returns {Promise<Object.<string, LoadedResource>> | undefined}
  *
  * @example
  * const resources = {
@@ -43,7 +47,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * };
  *
  * io.load(resources, (err, res) => {
- *   res.hello; // => String
+ *   res.hello; // => DOMString
  *   res.data; // => Object
  *   res.img; // => HTMLImageElement
  *   res.hdrImg; // => ArrayBuffer

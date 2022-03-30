@@ -3,13 +3,14 @@ import { xhrGet, promisify } from "./utils.js";
 /**
  * @callback textCallback
  * @param {Error} err
- * @param {string} text
+ * @param {DOMString} text
  */
 
 /**
  * Loads a text file
  * @param {string} url
  * @param {textCallback} [callback]
+ * @returns {Promise<DOMString> | undefined}
  */
 function loadText(url, callback) {
   xhrGet(url, "", (request) => {

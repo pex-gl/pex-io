@@ -21,30 +21,53 @@ npm install pex-io
 ## Usage
 
 ```js
-import pexIo from "pex-io";
-console.log(pexIo);
+import * as io from "pex-io";
+
+try {
+  const text = await io.loadText("assets/hello.txt");
+  // => DOMString
+  const json = await io.loadJSON("assets/color.json");
+  // => Object
+  const image = await io.loadImage("assets/pex.png");
+  // => HTMLImageElement
+  const binary = await io.loadBinary("assets/data.bin");
+  // => ArrayBuffer
+} catch (error) {
+  console.log(error);
+}
 ```
 
 ## API
+
+The API allows methods to be called by either the [Node.js error callback convention](https://nodejs.org/en/knowledge/errors/what-are-the-error-conventions/) (`(err, value) => {}`) or asynchronous, promise-based behavior (`async/await`):
+
+```js
+loadText("hello.txt", (err, text) => {
+  console.log(text);
+});
+// is equivalent to
+const text = await loadText("hello.txt");
+console.log(text);
+```
 
 <!-- api-start -->
 
 ## Functions
 
 <dl>
-<dt><a href="#load">load(resources, callback)</a></dt>
+<dt><a href="#load">load(resources, callback)</a> ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads resources from a named map</p>
 </dd>
-<dt><a href="#loadBinary">loadBinary(file, [callback])</a></dt>
+<dt><a href="#loadBinary">loadBinary(file, [callback])</a> ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads binary data</p>
 </dd>
-<dt><a href="#loadImage">loadImage(urlOrOpts, [callback])</a></dt>
+<dt><a href="#loadImage">loadImage(urlOrOpts, [callback])</a> ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads a HTML Image</p>
 </dd>
-<dt><a href="#loadJSON">loadJSON(url, [callback])</a></dt>
+<dt><a href="#loadJSON">loadJSON(url, [callback])</a> ⇒ <code>Promise.&lt;Object&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads JSON data</p>
 </dd>
-<dt><a href="#loadText">loadText(url, [callback])</a></dt>
+<dt><a href="#loadText">loadText(url, [callback])</a> ⇒ <code>Promise.&lt;DOMString&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads a text file</p>
 </dd>
 </dl>
@@ -53,6 +76,8 @@ console.log(pexIo);
 
 <dl>
 <dt><a href="#Resource">Resource</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#LoadedResource">LoadedResource</a> : <code>DOMString</code> | <code>Object</code> | <code>HTMLImageElement</code> | <code>ArrayBuffer</code></dt>
 <dd></dd>
 <dt><a href="#resourceCallback">resourceCallback</a> : <code>function</code></dt>
 <dd></dd>
@@ -70,7 +95,7 @@ console.log(pexIo);
 
 <a name="load"></a>
 
-## load(resources, callback)
+## load(resources, callback) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code> \| <code>undefined</code>
 
 Loads resources from a named map
 
@@ -92,7 +117,7 @@ const resources = {
 };
 
 io.load(resources, (err, res) => {
-  res.hello; // => String
+  res.hello; // => DOMString
   res.data; // => Object
   res.img; // => HTMLImageElement
   res.hdrImg; // => ArrayBuffer
@@ -102,7 +127,7 @@ io.load(resources, (err, res) => {
 
 <a name="loadBinary"></a>
 
-## loadBinary(file, [callback])
+## loadBinary(file, [callback]) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code> \| <code>undefined</code>
 
 Loads binary data
 
@@ -115,7 +140,7 @@ Loads binary data
 
 <a name="loadImage"></a>
 
-## loadImage(urlOrOpts, [callback])
+## loadImage(urlOrOpts, [callback]) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code> \| <code>undefined</code>
 
 Loads a HTML Image
 
@@ -128,7 +153,7 @@ Loads a HTML Image
 
 <a name="loadJSON"></a>
 
-## loadJSON(url, [callback])
+## loadJSON(url, [callback]) ⇒ <code>Promise.&lt;Object&gt;</code> \| <code>undefined</code>
 
 Loads JSON data
 
@@ -141,7 +166,7 @@ Loads JSON data
 
 <a name="loadText"></a>
 
-## loadText(url, [callback])
+## loadText(url, [callback]) ⇒ <code>Promise.&lt;DOMString&gt;</code> \| <code>undefined</code>
 
 Loads a text file
 
@@ -166,16 +191,21 @@ Loads a text file
 | [image]  | <code>string</code> |
 | [binary] | <code>string</code> |
 
+<a name="LoadedResource"></a>
+
+## LoadedResource : <code>DOMString</code> \| <code>Object</code> \| <code>HTMLImageElement</code> \| <code>ArrayBuffer</code>
+
+**Kind**: global typedef
 <a name="resourceCallback"></a>
 
 ## resourceCallback : <code>function</code>
 
 **Kind**: global typedef
 
-| Param | Type                                                                                |
-| ----- | ----------------------------------------------------------------------------------- |
-| err   | <code>Error</code>                                                                  |
-| res   | <code>Object.&lt;string, (string\|Object\|HTMLImageElement\|ArrayBuffer)&gt;</code> |
+| Param | Type                                               |
+| ----- | -------------------------------------------------- |
+| err   | <code>Error</code>                                 |
+| res   | <code>Object.&lt;string, LoadedResource&gt;</code> |
 
 <a name="binaryCallback"></a>
 
@@ -219,7 +249,7 @@ Loads a text file
 | Param | Type                |
 | ----- | ------------------- |
 | err   | <code>Error</code>  |
-| json  | <code>string</code> |
+| json  | <code>Object</code> |
 
 <a name="textCallback"></a>
 
@@ -227,10 +257,10 @@ Loads a text file
 
 **Kind**: global typedef
 
-| Param | Type                |
-| ----- | ------------------- |
-| err   | <code>Error</code>  |
-| text  | <code>string</code> |
+| Param | Type                   |
+| ----- | ---------------------- |
+| err   | <code>Error</code>     |
+| text  | <code>DOMString</code> |
 
 <!-- api-end -->
 
