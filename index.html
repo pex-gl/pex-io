@@ -48,6 +48,7 @@
         json: "assets/color.json",
         image: "assets/pex.png",
         binary: "assets/data.bin",
+        blob: "assets/hello.txt",
         errorNotFound: "assets/not-found.ext",
       };
 
@@ -58,9 +59,12 @@
         "callback-batch": { ...assetState },
         async: { ...assetState },
         "async-batch": { ...assetState },
+        fetch: { ...assetState, blob: null },
+        "fetch-batch": { ...assetState, blob: null },
         error: { ...assetState, error: null },
         "image-options": { all: null, readOnly: null, urlOnly: null },
       };
+      window.state = state;
 
       const app = () => () => {
         return [
@@ -174,6 +178,63 @@
         state["async-batch"].json = res.color;
         state["async-batch"].image = res.pex;
         state["async-batch"].binary = res.data;
+      })();
+
+      // fetch
+      (async () => {
+        try {
+          state.fetch.text = await io.fetchText(ASSETS.text);
+        } catch (error) {
+          state.fetch.text = error;
+          console.log("fetch", error);
+        }
+        try {
+          state.fetch.json = await io.fetchJson(ASSETS.json);
+        } catch (error) {
+          state.fetch.json = error;
+          console.log("fetch", error);
+        }
+        try {
+          state.fetch.image = await io.fetchImage(ASSETS.image);
+        } catch (error) {
+          state.fetch.image = error;
+          console.log("fetch", error);
+        }
+        try {
+          state.fetch.binary = await io.fetchArrayBuffer(ASSETS.binary);
+        } catch (error) {
+          state.fetch.binary = error;
+          console.log("fetch", error);
+        }
+        try {
+          state.fetch.blob = await io.fetchBlob(ASSETS.blob);
+          state.fetch.blob = await state.fetch.blob.text();
+        } catch (error) {
+          state.fetch.blob = error;
+          console.log("fetch", error);
+        }
+      })();
+
+      // fetch-batch
+      (async () => {
+        let res;
+        try {
+          res = await io.fetchAll({
+            hello: { text: ASSETS.text },
+            color: { json: ASSETS.json },
+            pex: { image: ASSETS.image },
+            data: { binary: ASSETS.binary },
+            blob: { blob: ASSETS.blob },
+          });
+        } catch (err) {
+          res = err;
+          console.log("fetch batch", filterResultsErrors(err));
+        }
+        state["fetch-batch"].text = res.hello;
+        state["fetch-batch"].json = res.color;
+        state["fetch-batch"].image = res.pex;
+        state["fetch-batch"].binary = res.data;
+        state["fetch-batch"].blob = await res.blob.text();
       })();
 
       // Error

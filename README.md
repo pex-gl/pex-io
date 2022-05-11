@@ -55,6 +55,24 @@ console.log(text);
 ## Functions
 
 <dl>
+<dt><a href="#fetchText">fetchText(url, options)</a> ⇒ <code>Promise.&lt;string&gt;</code></dt>
+<dd><p>Load an item and parse the Response as text</p>
+</dd>
+<dt><a href="#fetchJson">fetchJson(url, options)</a> ⇒ <code>Promise.&lt;JSON&gt;</code></dt>
+<dd><p>Load an item and parse the Response as json</p>
+</dd>
+<dt><a href="#fetchArrayBuffer">fetchArrayBuffer(url, options)</a> ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code></dt>
+<dd><p>Load an item and parse the Response as arrayBuffer</p>
+</dd>
+<dt><a href="#fetchBlob">fetchBlob(url, options)</a> ⇒ <code>Promise.&lt;Blob&gt;</code></dt>
+<dd><p>Load an item and parse the Response as blob</p>
+</dd>
+<dt><a href="#fetchImage">fetchImage(urlOrOpts, options)</a> ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code></dt>
+<dd><p>Load an item, parse the Response as blob and create a HTML Image</p>
+</dd>
+<dt><a href="#fetchAll">fetchAll(resources)</a> ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code></dt>
+<dd><p>Loads resources from a named map</p>
+</dd>
 <dt><a href="#load">load(resources, callback)</a> ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code> | <code>undefined</code></dt>
 <dd><p>Loads resources from a named map</p>
 </dd>
@@ -92,6 +110,102 @@ console.log(text);
 <dt><a href="#textCallback">textCallback</a> : <code>function</code></dt>
 <dd></dd>
 </dl>
+
+<a name="fetchText"></a>
+
+## fetchText(url, options) ⇒ <code>Promise.&lt;string&gt;</code>
+
+Load an item and parse the Response as text
+
+**Kind**: global function
+
+| Param   | Type                     |
+| ------- | ------------------------ |
+| url     | <code>RequestInfo</code> |
+| options | <code>RequestInit</code> |
+
+<a name="fetchJson"></a>
+
+## fetchJson(url, options) ⇒ <code>Promise.&lt;JSON&gt;</code>
+
+Load an item and parse the Response as json
+
+**Kind**: global function
+
+| Param   | Type                     |
+| ------- | ------------------------ |
+| url     | <code>RequestInfo</code> |
+| options | <code>RequestInit</code> |
+
+<a name="fetchArrayBuffer"></a>
+
+## fetchArrayBuffer(url, options) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
+
+Load an item and parse the Response as arrayBuffer
+
+**Kind**: global function
+
+| Param   | Type                     |
+| ------- | ------------------------ |
+| url     | <code>RequestInfo</code> |
+| options | <code>RequestInit</code> |
+
+<a name="fetchBlob"></a>
+
+## fetchBlob(url, options) ⇒ <code>Promise.&lt;Blob&gt;</code>
+
+Load an item and parse the Response as blob
+
+**Kind**: global function
+
+| Param   | Type                     |
+| ------- | ------------------------ |
+| url     | <code>RequestInfo</code> |
+| options | <code>RequestInit</code> |
+
+<a name="fetchImage"></a>
+
+## fetchImage(urlOrOpts, options) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+
+Load an item, parse the Response as blob and create a HTML Image
+
+**Kind**: global function
+
+| Param     | Type                                                              |
+| --------- | ----------------------------------------------------------------- |
+| urlOrOpts | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
+| options   | <code>RequestInit</code>                                          |
+
+<a name="fetchAll"></a>
+
+## fetchAll(resources) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
+
+Loads resources from a named map
+
+**Kind**: global function
+
+| Param     | Type                                         |
+| --------- | -------------------------------------------- |
+| resources | <code>Object.&lt;string, Resource&gt;</code> |
+
+**Example**
+
+```js
+const resources = {
+  hello: { text: "assets/hello.txt" },
+  data: { json: "assets/data.json" },
+  img: { image: "assets/tex.jpg" },
+  hdrImg: { binary: "assets/tex.hdr" },
+  blob: { binary: "assets/blob" },
+};
+
+const res = await io.fetchAll(resources);
+res.hello; // => DOMString
+res.data; // => Object
+res.img; // => HTMLImageElement
+res.hdrImg; // => ArrayBuffer
+res.blob; // => Blob
+```
 
 <a name="load"></a>
 

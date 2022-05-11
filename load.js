@@ -60,14 +60,11 @@ function load(resources, callback) {
   Promise.allSettled(
     names.map(async (name) => {
       const res = resources[name];
-
       const loader = LOADERS_MAP_KEYS.find((loader) => res[loader]);
       if (loader) return await LOADERS_MAP[loader](res[loader]);
       return Promise.reject(
-        new Error(
-          `io.load: unknown resource type "${Object.keys(res)}".
-Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`
-        )
+        new Error(`io.load: unknown resource type "${Object.keys(res)}".
+Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`)
       );
     })
   ).then((values) => {
