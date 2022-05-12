@@ -90,9 +90,14 @@
       document.querySelector(".Result").appendChild(container);
 
       const updateState = (selector, value) => {
+        const element = document.querySelector(`.${selector}`);
+        if (value instanceof Image) {
+          element.innerHTML = "";
+          element.appendChild(value);
+          return;
+        }
         if (value instanceof Error) console.error(value);
         if (value.color) value = JSON.stringify(value);
-        if (value instanceof Image) value = ["img", { src: value.src }];
         if (value instanceof ArrayBuffer)
           value = `ArrayBuffer ${value.byteLength} bytes`;
         document.querySelector(`.${selector}`).innerHTML = value;
