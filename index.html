@@ -30,246 +30,185 @@
       <h1>pex-io</h1>
       <div class="Result"></div>
     </main>
-    <script async src="web_modules/es-module-shims.js"></script>
-    <script type="importmap">
-      {
-        "imports": {
-          "hdom": "./web_modules/@thi.ng/hdom.js"
-        }
-      }
-    </script>
 
     <script type="module">
       import * as io from "./index.js";
-      import * as hdom from "hdom";
 
       const ASSETS = {
         text: "assets/hello.txt",
         json: "assets/color.json",
         image: "assets/pex.png",
-        binary: "assets/data.bin",
+        arrayBuffer: "assets/data.bin",
         blob: "assets/hello.txt",
         errorNotFound: "assets/not-found.ext",
       };
 
-      const assetState = { text: null, json: null, image: null, binary: null };
+      const assetTypes = {
+        text: null,
+        json: null,
+        image: null,
+        arrayBuffer: null,
+        blob: null,
+      };
 
-      const state = {
-        callback: { ...assetState },
-        "callback-batch": { ...assetState },
-        async: { ...assetState },
-        "async-batch": { ...assetState },
-        fetch: { ...assetState, blob: null },
-        "fetch-batch": { ...assetState, blob: null },
-        error: { ...assetState, error: null },
+      const categories = {
+        loadX: { ...assetTypes },
+        load: { ...assetTypes },
+        error: { ...assetTypes, all: null, unknownType: null },
         "image-options": { all: null, readOnly: null, urlOnly: null },
       };
-      window.state = state;
 
-      const app = () => () => {
-        return [
-          "div",
-          { style: { display: "flex", "flex-wrap": "wrap", gap: "60px" } },
-          Object.keys(state).map((technique) => [
-            "div",
-            ["h2", technique],
-            Object.keys(state[technique]).map((itemName) => {
-              let value = state[technique][itemName];
-              if (!value) value = "loading...";
-              if (value.color) value = JSON.stringify(value);
-              if (value instanceof Image) value = ["img", { src: value.src }];
-              if (value instanceof ArrayBuffer)
-                value = `ArrayBuffer ${value.byteLength} bytes`;
-              return ["div", ["h3", itemName], ["code", value]];
-            }),
-          ]),
-        ];
+      const container = document.createElement("div");
+      Object.assign(container.style, {
+        display: "flex",
+        "flex-wrap": "wrap",
+        gap: "60px",
+      });
+
+      Object.keys(categories).map((category) => {
+        const categoryContainer = document.createElement("div");
+        const title = document.createElement("h2");
+        title.innerHTML = category;
+        categoryContainer.appendChild(title);
+
+        Object.keys(categories[category]).map((itemName) => {
+          const item = document.createElement("div");
+          const itemTitle = document.createElement("h3");
+          itemTitle.innerHTML = itemName;
+          const itemValue = document.createElement("pre");
+          itemValue.className = `${category}-${itemName}`;
+          itemValue.innerHTML = "loading...";
+
+          item.appendChild(itemTitle);
+          item.appendChild(itemValue);
+
+          categoryContainer.appendChild(item);
+        });
+        container.appendChild(categoryContainer);
+      });
+
+      document.querySelector(".Result").appendChild(container);
+
+      const updateState = (selector, value) => {
+        if (value instanceof Error) console.error(value);
+        if (value.color) value = JSON.stringify(value);
+        if (value instanceof Image) value = ["img", { src: value.src }];
+        if (value instanceof ArrayBuffer)
+          value = `ArrayBuffer ${value.byteLength} bytes`;
+        document.querySelector(`.${selector}`).innerHTML = value;
       };
-
-      hdom.start(app(), { root: document.querySelector(".Result") });
 
       const filterResultsErrors = (results) =>
         Object.fromEntries(
           Object.entries(results).filter(([_, v]) => v instanceof Error)
         );
 
-      // callback
-      (() => {
-        io.loadText(ASSETS.text, (err, text) => {
-          state.callback.text = err || text;
-          if (err) console.log("callback", err);
-        });
-        io.loadJSON(ASSETS.json, (err, json) => {
-          state.callback.json = err || json;
-          if (err) console.log("callback", err);
-        });
-        io.loadImage(ASSETS.image, (err, image) => {
-          state.callback.image = err || image;
-          if (err) console.log("callback", err);
-        });
-        io.loadBinary(ASSETS.binary, (err, data) => {
-          state.callback.binary = err || data;
-          if (err) console.log("callback", err);
-        });
-      })();
-
-      // callback batch
-      (() => {
-        io.load(
-          {
-            hello: { text: ASSETS.text },
-            color: { json: ASSETS.json },
-            pex: { image: ASSETS.image },
-            data: { binary: ASSETS.binary },
-          },
-          (err, res) => {
-            state["callback-batch"].text = res.hello;
-            state["callback-batch"].json = res.color;
-            state["callback-batch"].image = res.pex;
-            state["callback-batch"].binary = res.data;
-            if (err) console.log("callback batch", filterResultsErrors(err));
-          }
-        );
-      })();
-
-      // async
       (async () => {
+        // fetch
         try {
-          state.async.text = await io.loadText(ASSETS.text);
+          updateState("loadX-text", await io.loadText(ASSETS.text));
         } catch (error) {
-          state.async.text = error;
-          console.log("async/await", error);
+          updateState("loadX-text", error);
         }
         try {
-          state.async.json = await io.loadJSON(ASSETS.json);
+          updateState("loadX-json", await io.loadJson(ASSETS.json));
         } catch (error) {
-          state.async.json = error;
-          console.log("async/await", error);
+          updateState("loadX-json", error);
         }
         try {
-          state.async.image = await io.loadImage(ASSETS.image);
+          updateState("loadX-image", await io.loadImage(ASSETS.image));
         } catch (error) {
-          state.async.image = error;
-          console.log("async/await", error);
+          updateState("loadX-image", error);
         }
         try {
-          state.async.binary = await io.loadBinary(ASSETS.binary);
+          updateState(
+            "loadX-arrayBuffer",
+            await io.loadArrayBuffer(ASSETS.arrayBuffer)
+          );
         } catch (error) {
-          state.async.binary = error;
-          console.log("async/await", error);
+          updateState("loadX-arrayBuffer", error);
+          console.log("loadX", error);
         }
-      })();
+        try {
+          const blob = await io.loadBlob(ASSETS.blob);
+          updateState("loadX-blob", await blob.text());
+        } catch (error) {
+          updateState("loadX-blob", error);
+        }
 
-      // async batch
-      (async () => {
+        // load
         let res;
         try {
           res = await io.load({
             hello: { text: ASSETS.text },
             color: { json: ASSETS.json },
             pex: { image: ASSETS.image },
-            data: { binary: ASSETS.binary },
-          });
-        } catch (err) {
-          res = err;
-          console.log("async/await batch", filterResultsErrors(err));
-        }
-        state["async-batch"].text = res.hello;
-        state["async-batch"].json = res.color;
-        state["async-batch"].image = res.pex;
-        state["async-batch"].binary = res.data;
-      })();
-
-      // fetch
-      (async () => {
-        try {
-          state.fetch.text = await io.fetchText(ASSETS.text);
-        } catch (error) {
-          state.fetch.text = error;
-          console.log("fetch", error);
-        }
-        try {
-          state.fetch.json = await io.fetchJson(ASSETS.json);
-        } catch (error) {
-          state.fetch.json = error;
-          console.log("fetch", error);
-        }
-        try {
-          state.fetch.image = await io.fetchImage(ASSETS.image);
-        } catch (error) {
-          state.fetch.image = error;
-          console.log("fetch", error);
-        }
-        try {
-          state.fetch.binary = await io.fetchArrayBuffer(ASSETS.binary);
-        } catch (error) {
-          state.fetch.binary = error;
-          console.log("fetch", error);
-        }
-        try {
-          state.fetch.blob = await io.fetchBlob(ASSETS.blob);
-          state.fetch.blob = await state.fetch.blob.text();
-        } catch (error) {
-          state.fetch.blob = error;
-          console.log("fetch", error);
-        }
-      })();
-
-      // fetch-batch
-      (async () => {
-        let res;
-        try {
-          res = await io.fetchAll({
-            hello: { text: ASSETS.text },
-            color: { json: ASSETS.json },
-            pex: { image: ASSETS.image },
-            data: { binary: ASSETS.binary },
+            data: { arrayBuffer: ASSETS.arrayBuffer },
             blob: { blob: ASSETS.blob },
           });
         } catch (err) {
           res = err;
-          console.log("fetch batch", filterResultsErrors(err));
+          console.log("load", filterResultsErrors(err));
         }
-        state["fetch-batch"].text = res.hello;
-        state["fetch-batch"].json = res.color;
-        state["fetch-batch"].image = res.pex;
-        state["fetch-batch"].binary = res.data;
-        state["fetch-batch"].blob = await res.blob.text();
-      })();
+        updateState("load-text", res.hello);
+        updateState("load-json", res.color);
+        updateState("load-image", res.pex);
+        updateState("load-arrayBuffer", res.data);
+        updateState("load-blob", await res.blob.text());
 
-      // Error
-      (() => {
-        io.loadText(ASSETS.errorNotFound, (err, text) => {
-          state.error.text = err || text;
-          if (err) console.log("error", err);
-        });
-        io.loadJSON(ASSETS.errorNotFound, (err, json) => {
-          state.error.json = err || json;
-          if (err) console.log("error", err);
-        });
-        io.loadImage(ASSETS.errorNotFound, (err, image) => {
-          state.error.image = err || image;
-          if (err) console.log("error", err);
-        });
-        io.loadBinary(ASSETS.errorNotFound, (err, data) => {
-          state.error.binary = err || data;
-          if (err) console.log("error", err);
-        });
-        io.load({ errorUnknownType: { foo: "bar" } }, (err, res) => {
-          state.error.error = res.errorUnknownType;
-          if (err) console.log("error", filterResultsErrors(err));
-        });
-      })();
+        // Error
+        try {
+          await io.loadText(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-text", error);
+        }
+        try {
+          await io.loadJson(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-json", error);
+        }
+        try {
+          await io.loadImage(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-image", error);
+        }
+        try {
+          await io.loadArrayBuffer(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-arrayBuffer", error);
+        }
+        try {
+          await io.loadBlob(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-blob", error);
+        }
+        {
+          const items = await io.load({
+            errorNotFound: { arrayBuffer: ASSETS.errorNotFound },
+          });
+          const errors = filterResultsErrors(items);
+          if (Object.keys(errors).length) {
+            updateState("error-all", items.errorNotFound);
+          }
+        }
+        {
+          const items = await io.load({
+            errorUnknownType: { foo: "bar" },
+          });
+          const errors = filterResultsErrors(items);
+          if (Object.keys(errors).length) {
+            updateState("error-unknownType", items.errorUnknownType);
+          }
+        }
 
-      // Image option
-      const printImageAttributes = (image) =>
-        Array.from(image.attributes)
-          .map((a) => a.name)
-          .join(", ");
+        // Image option
+        const printAttributes = (element) =>
+          Array.from(element.attributes)
+            .map((attribute) => attribute.name)
+            .join(", ");
 
-      (() => {
-        io.loadImage(
-          {
+        try {
+          const image = await io.loadImage({
             url: ASSETS.image,
 
             alt: "Image Options",
@@ -284,26 +223,30 @@
             srcset: `${ASSETS.image} 1x, ${ASSETS.image} 2x`,
             useMap: false,
             width: 20,
-          },
-          (err, image) => {
-            state["image-options"].all =
-              err || image + printImageAttributes(image);
+          });
+          updateState(
+            "image-options-all",
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+          );
+        } catch (error) {
+          updateState("image-options-all", error);
+        }
 
-            if (err) console.log("image option", err);
-          }
-        );
-        io.loadImage({ url: ASSETS.image, complete: true }, (err, image) => {
-          state["image-options"].readOnly =
-            err || image + printImageAttributes(image);
+        try {
+          await io.loadImage({ url: ASSETS.image, complete: true });
+        } catch (error) {
+          updateState("image-options-readOnly", error);
+        }
 
-          if (err) console.log("image option", err);
-        });
-        io.loadImage({ url: ASSETS.image }, (err, image) => {
-          state["image-options"].urlOnly =
-            err || image + printImageAttributes(image);
-
-          if (err) console.log("image option", err);
-        });
+        try {
+          const image = await io.loadImage({ url: ASSETS.image });
+          updateState(
+            "image-options-urlOnly",
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+          );
+        } catch (error) {
+          updateState("image-options-urlOnly", error);
+        }
       })();
     </script>
   </body>

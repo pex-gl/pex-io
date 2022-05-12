@@ -1,6 +1,0 @@
-{
-  "imports": {
-    "@thi.ng/hdom": "./@thi.ng/hdom.js",
-    "es-module-shims": "./es-module-shims.js"
-  }
-}
