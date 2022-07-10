@@ -26,7 +26,7 @@ import * as io from "pex-io";
 try {
   const text = await io.loadText("assets/hello.txt");
   // => DOMString
-  const json = await io.loadJSON("assets/color.json");
+  const json = await io.loadJson("assets/color.json");
   // => Object
   const image = await io.loadImage("assets/pex.png");
   // => HTMLImageElement
