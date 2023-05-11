@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>pex-io by pex-gl (https://github.com/pex-gl)</title>
+    <style>
+      :root {
+        --color-dark: #404040;
+        --color-light: #f2f2f2;
+        --color-accent: #fd5e62;
+      }
+
+      body {
+        margin: 0;
+        overscroll-behavior: none;
+        font-family: sans-serif;
+        color: var(--color-dark);
+        background-color: var(--color-light);
+      }
+
+      main {
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>pex-io</h1>
+      <div class="Result"></div>
+    </main>
+
+    <script type="module">
+      import * as io from "./index.js";
+
+      const ASSETS = {
+        text: "assets/hello.txt",
+        json: "assets/color.json",
+        image: "assets/pex.png",
+        arrayBuffer: "assets/data.bin",
+        blob: "assets/hello.txt",
+        errorNotFound: "assets/not-found.ext",
+      };
+
+      const assetTypes = {
+        text: null,
+        json: null,
+        image: null,
+        arrayBuffer: null,
+        blob: null,
+      };
+
+      const categories = {
+        loadX: { ...assetTypes },
+        load: { ...assetTypes },
+        error: { ...assetTypes, all: null, unknownType: null },
+        "image-options": { all: null, readOnly: null, urlOnly: null },
+      };
+
+      const container = document.createElement("div");
+      Object.assign(container.style, {
+        display: "flex",
+        "flex-wrap": "wrap",
+        gap: "60px",
+      });
+
+      Object.keys(categories).map((category) => {
+        const categoryContainer = document.createElement("div");
+        const title = document.createElement("h2");
+        title.innerHTML = category;
+        categoryContainer.appendChild(title);
+
+        Object.keys(categories[category]).map((itemName) => {
+          const item = document.createElement("div");
+          const itemTitle = document.createElement("h3");
+          itemTitle.innerHTML = itemName;
+          const itemValue = document.createElement("pre");
+          itemValue.className = `${category}-${itemName}`;
+          itemValue.innerHTML = "loading...";
+
+          item.appendChild(itemTitle);
+          item.appendChild(itemValue);
+
+          categoryContainer.appendChild(item);
+        });
+        container.appendChild(categoryContainer);
+      });
+
+      document.querySelector(".Result").appendChild(container);
+
+      const updateState = (selector, value) => {
+        const element = document.querySelector(`.${selector}`);
+        if (value instanceof Image) {
+          element.innerHTML = "";
+          element.appendChild(value);
+          return;
+        }
+        if (value instanceof Error) console.error(value);
+        if (value.color) value = JSON.stringify(value);
+        if (value instanceof ArrayBuffer)
+          value = `ArrayBuffer ${value.byteLength} bytes`;
+        document.querySelector(`.${selector}`).innerHTML = value;
+      };
+
+      const filterResultsErrors = (results) =>
+        Object.fromEntries(
+          Object.entries(results).filter(([_, v]) => v instanceof Error)
+        );
+
+      (async () => {
+        // fetch
+        try {
+          updateState("loadX-text", await io.loadText(ASSETS.text));
+        } catch (error) {
+          updateState("loadX-text", error);
+        }
+        try {
+          updateState("loadX-json", await io.loadJson(ASSETS.json));
+        } catch (error) {
+          updateState("loadX-json", error);
+        }
+        try {
+          updateState("loadX-image", await io.loadImage(ASSETS.image));
+        } catch (error) {
+          updateState("loadX-image", error);
+        }
+        try {
+          updateState(
+            "loadX-arrayBuffer",
+            await io.loadArrayBuffer(ASSETS.arrayBuffer)
+          );
+        } catch (error) {
+          updateState("loadX-arrayBuffer", error);
+          console.log("loadX", error);
+        }
+        try {
+          const blob = await io.loadBlob(ASSETS.blob);
+          updateState("loadX-blob", await blob.text());
+        } catch (error) {
+          updateState("loadX-blob", error);
+        }
+
+        // load
+        let res;
+        try {
+          res = await io.load({
+            hello: { text: ASSETS.text },
+            color: { json: ASSETS.json },
+            pex: { image: ASSETS.image },
+            data: { arrayBuffer: ASSETS.arrayBuffer },
+            blob: { blob: ASSETS.blob },
+          });
+        } catch (err) {
+          res = err;
+          console.log("load", filterResultsErrors(err));
+        }
+        updateState("load-text", res.hello);
+        updateState("load-json", res.color);
+        updateState("load-image", res.pex);
+        updateState("load-arrayBuffer", res.data);
+        updateState("load-blob", await res.blob.text());
+
+        // Error
+        try {
+          await io.loadText(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-text", error);
+        }
+        try {
+          await io.loadJson(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-json", error);
+        }
+        try {
+          await io.loadImage(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-image", error);
+        }
+        try {
+          await io.loadArrayBuffer(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-arrayBuffer", error);
+        }
+        try {
+          await io.loadBlob(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-blob", error);
+        }
+        {
+          const items = await io.load({
+            errorNotFound: { arrayBuffer: ASSETS.errorNotFound },
+          });
+          const errors = filterResultsErrors(items);
+          if (Object.keys(errors).length) {
+            updateState("error-all", items.errorNotFound);
+          }
+        }
+        {
+          const items = await io.load({
+            errorUnknownType: { foo: "bar" },
+          });
+          const errors = filterResultsErrors(items);
+          if (Object.keys(errors).length) {
+            updateState("error-unknownType", items.errorUnknownType);
+          }
+        }
+
+        // Image option
+        const printAttributes = (element) =>
+          Array.from(element.attributes)
+            .map((attribute) => attribute.name)
+            .join(", ");
+
+        try {
+          const image = await io.loadImage({
+            url: ASSETS.image,
+
+            alt: "Image Options",
+            crossOrigin: "anonymous",
+            decoding: "async",
+            fetchPriority: "auto",
+            height: 20,
+            isMap: false,
+            loading: "eager",
+            referrerPolicy: "no-referrer",
+            sizes: "(max-width: 600px) 480px, 800px",
+            src: "bogus",
+            srcset: `${ASSETS.image} 1x, ${ASSETS.image} 2x`,
+            useMap: false,
+            width: 20,
+          });
+          updateState(
+            "image-options-all",
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+          );
+        } catch (error) {
+          updateState("image-options-all", error);
+        }
+
+        try {
+          await io.loadImage({ url: ASSETS.image, complete: true });
+        } catch (error) {
+          updateState("image-options-readOnly", error);
+        }
+
+        try {
+          const image = await io.loadImage({ url: ASSETS.image });
+          updateState(
+            "image-options-urlOnly",
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+          );
+        } catch (error) {
+          updateState("image-options-urlOnly", error);
+        }
+      })();
+    </script>
+  </body>
+</html>
