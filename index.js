@@ -48,9 +48,9 @@ export const loadBlob = async (url, options = {}) =>
   await (await ok(await fetch(url, options))).blob();
 
 /**
- * @typedef {Object} ImageOptions
- * @param {string} url
- * @param {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties|HTMLImageElement#properties}
+ * @typedef {object} ImageOptions
+ * @property {string} url
+ * @property {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties|HTMLImageElement#properties}
  */
 
 /**
@@ -103,7 +103,7 @@ const LOADERS_MAP = {
 const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
 
 /**
- * @typedef {Object} Resource
+ * @typedef {object} Resource
  * @property {string} [text]
  * @property {string} [json]
  * @property {string} [image]
@@ -111,7 +111,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * @property {RequestInit} [options] {@link https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters|Request#parameters}
  */
 /**
- * @typedef {DOMString | Object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
+ * @typedef {DOMString | object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
  */
 
 /**
