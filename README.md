@@ -69,11 +69,11 @@ try {
 ## Typedefs
 
 <dl>
-<dt><a href="#ImageOptions">ImageOptions</a> : <code>Object</code></dt>
+<dt><a href="#ImageOptions">ImageOptions</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#Resource">Resource</a> : <code>Object</code></dt>
+<dt><a href="#Resource">Resource</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#LoadedResource">LoadedResource</a> : <code>DOMString</code> | <code>Object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
+<dt><a href="#LoadedResource">LoadedResource</a> : <code>DOMString</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
 <dd></dd>
 </dl>
 
@@ -175,18 +175,19 @@ res.hdrImg; // => ArrayBuffer
 
 <a name="ImageOptions"></a>
 
-## ImageOptions : <code>Object</code>
+## ImageOptions : <code>object</code>
 
 **Kind**: global typedef
+**Properties**
 
-| Param   | Type                | Description                                                                                                 |
+| Name    | Type                | Description                                                                                                 |
 | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
 | url     | <code>string</code> |                                                                                                             |
 | ...rest | <code>\*</code>     | [HTMLImageElement#properties](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties) |
 
 <a name="Resource"></a>
 
-## Resource : <code>Object</code>
+## Resource : <code>object</code>
 
 **Kind**: global typedef
 **Properties**
@@ -201,7 +202,7 @@ res.hdrImg; // => ArrayBuffer
 
 <a name="LoadedResource"></a>
 
-## LoadedResource : <code>DOMString</code> \| <code>Object</code> \| <code>HTMLImageElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code>
+## LoadedResource : <code>DOMString</code> \| <code>object</code> \| <code>HTMLImageElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code>
 
 **Kind**: global typedef
 
