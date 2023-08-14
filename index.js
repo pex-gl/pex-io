@@ -3,8 +3,8 @@ const ok = async (response) =>
     ? response
     : Promise.reject(
         new Error(
-          `GET ${response.url} ${response.status} (${response.statusText})`
-        )
+          `GET ${response.url} ${response.status} (${response.statusText})`,
+        ),
       );
 
 /**
@@ -111,7 +111,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * @property {RequestInit} [options] {@link https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters|Request#parameters}
  */
 /**
- * @typedef {DOMString | object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
+ * @typedef {string | object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
  */
 
 /**
@@ -119,7 +119,6 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * @function
  * @param {Object.<string, Resource>} resources
  * @returns {Promise<Object.<string, LoadedResource>>}
- *
  * @example
  * const resources = {
  *   hello: { text: "assets/hello.txt" },
@@ -130,7 +129,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * };
  *
  * const res = await io.load(resources);
- * res.hello; // => DOMString
+ * res.hello; // => string
  * res.data; // => Object
  * res.img; // => HTMLImageElement
  * res.blob; // => Blob
@@ -146,15 +145,15 @@ export const load = (resources) => {
       if (loader) return await LOADERS_MAP[loader](res[loader], res.options);
       return Promise.reject(
         new Error(`io.load: unknown resource type "${Object.keys(res)}".
-Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`)
+Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`),
       );
-    })
+    }),
   ).then((values) =>
     Object.fromEntries(
       Array.from(
         values.map((v) => v.value || v.reason),
-        (v, i) => [names[i], v]
-      )
-    )
+        (v, i) => [names[i], v],
+      ),
+    ),
   );
 };
