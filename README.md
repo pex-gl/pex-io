@@ -73,7 +73,7 @@ try {
 <dd></dd>
 <dt><a href="#Resource">Resource</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#LoadedResource">LoadedResource</a> : <code>DOMString</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
+<dt><a href="#LoadedResource">LoadedResource</a> : <code>string</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
 <dd></dd>
 </dl>
 
@@ -166,7 +166,7 @@ const resources = {
 };
 
 const res = await io.load(resources);
-res.hello; // => DOMString
+res.hello; // => string
 res.data; // => Object
 res.img; // => HTMLImageElement
 res.blob; // => Blob
@@ -202,7 +202,7 @@ res.hdrImg; // => ArrayBuffer
 
 <a name="LoadedResource"></a>
 
-## LoadedResource : <code>DOMString</code> \| <code>object</code> \| <code>HTMLImageElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code>
+## LoadedResource : <code>string</code> \| <code>object</code> \| <code>HTMLImageElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code>
 
 **Kind**: global typedef
 
