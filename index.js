@@ -1,3 +1,5 @@
+/** @module pex-io */
+
 const ok = async (response) =>
   response.ok
     ? response
@@ -48,15 +50,9 @@ export const loadBlob = async (url, options = {}) =>
   await (await ok(await fetch(url, options))).blob();
 
 /**
- * @typedef {object} ImageOptions
- * @property {string} url
- * @property {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties|HTMLImageElement#properties}
- */
-
-/**
  * Load an item, parse the Response as blob and create a HTML Image.
  * @function
- * @param {string | ImageOptions} urlOrOpts
+ * @param {string | import("./types.js").ImageOptions} urlOrOpts
  * @param {RequestInit} options
  * @returns {Promise<HTMLImageElement>}
  */
@@ -103,22 +99,10 @@ const LOADERS_MAP = {
 const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
 
 /**
- * @typedef {object} Resource
- * @property {string} [text]
- * @property {string} [json]
- * @property {string} [image]
- * @property {string} [binary]
- * @property {RequestInit} [options] {@link https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters|Request#parameters}
- */
-/**
- * @typedef {string | object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
- */
-
-/**
  * Loads resources from a named map.
  * @function
- * @param {Object.<string, Resource>} resources
- * @returns {Promise<Object.<string, LoadedResource>>}
+ * @param {Object.<string, import("./types.js").Resource>} resources
+ * @returns {Promise<Object.<string, import("./types.js").LoadedResource>>}
  * @example
  * const resources = {
  *   hello: { text: "assets/hello.txt" },
