@@ -1,6 +1,6 @@
 {
   "name": "pex-io",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "File I/O in PEX.",
   "keywords": [
     "pex",
@@ -14,7 +14,10 @@
   ],
   "homepage": "https://github.com/pex-gl/pex-io",
   "bugs": "https://github.com/pex-gl/pex-io/issues",
-  "repository": "pex-gl/pex-io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pex-gl/pex-io.git"
+  },
   "license": "MIT",
   "author": "Marcin Ignac <marcin.ignac@gmail.com> (http://marcinignac.com)",
   "contributors": [

@@ -43,27 +43,11 @@ try {
 
 <!-- api-start -->
 
-## Functions
+## Modules
 
 <dl>
-<dt><a href="#loadText">loadText(url, options)</a> ⇒ <code>Promise.&lt;string&gt;</code></dt>
-<dd><p>Load an item and parse the Response as text.</p>
-</dd>
-<dt><a href="#loadJson">loadJson(url, options)</a> ⇒ <code>Promise.&lt;JSON&gt;</code></dt>
-<dd><p>Load an item and parse the Response as json.</p>
-</dd>
-<dt><a href="#loadArrayBuffer">loadArrayBuffer(url, options)</a> ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code></dt>
-<dd><p>Load an item and parse the Response as arrayBuffer.</p>
-</dd>
-<dt><a href="#loadBlob">loadBlob(url, options)</a> ⇒ <code>Promise.&lt;Blob&gt;</code></dt>
-<dd><p>Load an item and parse the Response as blob.</p>
-</dd>
-<dt><a href="#loadImage">loadImage(urlOrOpts, options)</a> ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code></dt>
-<dd><p>Load an item, parse the Response as blob and create a HTML Image.</p>
-</dd>
-<dt><a href="#load">load(resources)</a> ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code></dt>
-<dd><p>Loads resources from a named map.</p>
-</dd>
+<dt><a href="#module_pex-io">pex-io</a></dt>
+<dd></dd>
 </dl>
 
 ## Typedefs
@@ -77,78 +61,90 @@ try {
 <dd></dd>
 </dl>
 
-<a name="loadText"></a>
+<a name="module_pex-io"></a>
 
-## loadText(url, options) ⇒ <code>Promise.&lt;string&gt;</code>
+## pex-io
+
+- [pex-io](#module_pex-io)
+  - [.loadText(url, options)](#module_pex-io.loadText) ⇒ <code>Promise.&lt;string&gt;</code>
+  - [.loadJson(url, options)](#module_pex-io.loadJson) ⇒ <code>Promise.&lt;JSON&gt;</code>
+  - [.loadArrayBuffer(url, options)](#module_pex-io.loadArrayBuffer) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
+  - [.loadBlob(url, options)](#module_pex-io.loadBlob) ⇒ <code>Promise.&lt;Blob&gt;</code>
+  - [.loadImage(urlOrOpts, options)](#module_pex-io.loadImage) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+  - [.load(resources)](#module_pex-io.load) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
+
+<a name="module_pex-io.loadText"></a>
+
+### pex-io.loadText(url, options) ⇒ <code>Promise.&lt;string&gt;</code>
 
 Load an item and parse the Response as text.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param   | Type                     |
 | ------- | ------------------------ |
 | url     | <code>RequestInfo</code> |
 | options | <code>RequestInit</code> |
 
-<a name="loadJson"></a>
+<a name="module_pex-io.loadJson"></a>
 
-## loadJson(url, options) ⇒ <code>Promise.&lt;JSON&gt;</code>
+### pex-io.loadJson(url, options) ⇒ <code>Promise.&lt;JSON&gt;</code>
 
 Load an item and parse the Response as json.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param   | Type                     |
 | ------- | ------------------------ |
 | url     | <code>RequestInfo</code> |
 | options | <code>RequestInit</code> |
 
-<a name="loadArrayBuffer"></a>
+<a name="module_pex-io.loadArrayBuffer"></a>
 
-## loadArrayBuffer(url, options) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
+### pex-io.loadArrayBuffer(url, options) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
 
 Load an item and parse the Response as arrayBuffer.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param   | Type                     |
 | ------- | ------------------------ |
 | url     | <code>RequestInfo</code> |
 | options | <code>RequestInit</code> |
 
-<a name="loadBlob"></a>
+<a name="module_pex-io.loadBlob"></a>
 
-## loadBlob(url, options) ⇒ <code>Promise.&lt;Blob&gt;</code>
+### pex-io.loadBlob(url, options) ⇒ <code>Promise.&lt;Blob&gt;</code>
 
 Load an item and parse the Response as blob.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param   | Type                     |
 | ------- | ------------------------ |
 | url     | <code>RequestInfo</code> |
 | options | <code>RequestInit</code> |
 
-<a name="loadImage"></a>
+<a name="module_pex-io.loadImage"></a>
 
-## loadImage(urlOrOpts, options) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+### pex-io.loadImage(urlOrOpts, options) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
 
 Load an item, parse the Response as blob and create a HTML Image.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param     | Type                                                              |
 | --------- | ----------------------------------------------------------------- |
 | urlOrOpts | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
 | options   | <code>RequestInit</code>                                          |
 
-<a name="load"></a>
+<a name="module_pex-io.load"></a>
 
-## load(resources) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
+### pex-io.load(resources) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
 
 Loads resources from a named map.
 
-**Kind**: global function
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
 | Param     | Type                                         |
 | --------- | -------------------------------------------- |
