@@ -53,10 +53,10 @@ export const loadBlob = async (url, options = {}) =>
  * Load an item, parse the Response as blob and create a HTML Image.
  * @function
  * @param {string | import("./types.js").ImageOptions} urlOrOpts
- * @param {RequestInit} options
+ * @param {RequestInit} [options={}]
  * @returns {Promise<HTMLImageElement>}
  */
-export const loadImage = async (urlOrOpts, options = {}) => {
+export const loadImage = async (urlOrOpts, options) => {
   const img = new Image();
 
   let src = urlOrOpts;
@@ -70,19 +70,21 @@ export const loadImage = async (urlOrOpts, options = {}) => {
     }
   }
 
-  const data = await loadBlob(src, options);
+  if (options) src = URL.createObjectURL(await loadBlob(src, options));
 
   return await new Promise((resolve, reject) => {
     img.addEventListener("load", function load() {
       img.removeEventListener("load", load);
+      if (options) URL.revokeObjectURL(src);
       resolve(img);
     });
     img.addEventListener("error", function error() {
       img.removeEventListener("error", error);
+      if (options) URL.revokeObjectURL(src);
       reject(img);
     });
 
-    img.src = URL.createObjectURL(data);
+    img.src = src;
   });
 };
 
