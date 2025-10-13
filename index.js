@@ -13,50 +13,50 @@ const ok = async (response) =>
  * Load an item and parse the Response as text.
  * @function
  * @param {RequestInfo} url
- * @param {RequestInit} options
+ * @param {RequestInit} [fetchOptions]
  * @returns {Promise<string>}
  */
-export const loadText = async (url, options = {}) =>
-  await (await ok(await fetch(url, options))).text();
+export const loadText = async (url, fetchOptions) =>
+  await (await ok(await fetch(url, fetchOptions))).text();
 
 /**
  * Load an item and parse the Response as json.
  * @function
  * @param {RequestInfo} url
- * @param {RequestInit} options
+ * @param {RequestInit} [fetchOptions]
  * @returns {Promise<JSON>}
  */
-export const loadJson = async (url, options = {}) =>
-  await (await ok(await fetch(url, options))).json();
+export const loadJson = async (url, fetchOptions) =>
+  await (await ok(await fetch(url, fetchOptions))).json();
 
 /**
  * Load an item and parse the Response as arrayBuffer.
  * @function
  * @param {RequestInfo} url
- * @param {RequestInit} options
+ * @param {RequestInit} [fetchOptions]
  * @returns {Promise<ArrayBuffer>}
  */
-export const loadArrayBuffer = async (url, options = {}) =>
-  await (await ok(await fetch(url, options))).arrayBuffer();
+export const loadArrayBuffer = async (url, fetchOptions) =>
+  await (await ok(await fetch(url, fetchOptions))).arrayBuffer();
 
 /**
  * Load an item and parse the Response as blob.
  * @function
  * @param {RequestInfo} url
- * @param {RequestInit} options
+ * @param {RequestInit} [fetchOptions]
  * @returns {Promise<Blob>}
  */
-export const loadBlob = async (url, options = {}) =>
-  await (await ok(await fetch(url, options))).blob();
+export const loadBlob = async (url, fetchOptions) =>
+  await (await ok(await fetch(url, fetchOptions))).blob();
 
 /**
- * Create and load a HTML Image. If fetch options are specified, load and parse the Response as blob to set the "src" property.
+ * Create and load a HTML Image. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
  * @function
  * @param {string | import("./types.js").ImageOptions} urlOrImageProperties
- * @param {RequestInit} [options={}]
+ * @param {RequestInit} [fetchOptions]
  * @returns {Promise<HTMLImageElement>}
  */
-export const loadImage = async (urlOrImageProperties, options) => {
+export const loadImage = async (urlOrImageProperties, fetchOptions) => {
   const img = new Image();
 
   let src = urlOrImageProperties;
@@ -70,17 +70,19 @@ export const loadImage = async (urlOrImageProperties, options) => {
     }
   }
 
-  if (options) src = URL.createObjectURL(await loadBlob(src, options));
+  if (fetchOptions) {
+    src = URL.createObjectURL(await loadBlob(src, fetchOptions));
+  }
 
   return await new Promise((resolve, reject) => {
     img.addEventListener("load", function load() {
       img.removeEventListener("load", load);
-      if (options) URL.revokeObjectURL(src);
+      if (fetchOptions) URL.revokeObjectURL(src);
       resolve(img);
     });
     img.addEventListener("error", function error() {
       img.removeEventListener("error", error);
-      if (options) URL.revokeObjectURL(src);
+      if (fetchOptions) URL.revokeObjectURL(src);
       reject(img);
     });
 
