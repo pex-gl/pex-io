@@ -39,6 +39,7 @@
         json: "assets/color.json",
         image: "assets/pex.png",
         arrayBuffer: "assets/data.bin",
+        bytes: "assets/data.bin",
         blob: "assets/hello.txt",
         errorNotFound: "assets/not-found.ext",
       };
@@ -48,6 +49,7 @@
         json: null,
         image: null,
         arrayBuffer: null,
+        bytes: null,
         blob: null,
       };
 
@@ -102,10 +104,15 @@
           element.appendChild(value);
           return;
         }
+
         if (value instanceof Error) console.error(value);
         if (value.color) value = JSON.stringify(value);
-        if (value instanceof ArrayBuffer)
+        if (value instanceof ArrayBuffer) {
           value = `ArrayBuffer ${value.byteLength} bytes`;
+        }
+        if (value instanceof Uint8Array) {
+          value = `Uint8Array ${value.byteLength} bytes`;
+        }
         document.querySelector(`.${selector}`).innerHTML = value;
       };
 
@@ -138,7 +145,11 @@
           );
         } catch (error) {
           updateState("loadX-arrayBuffer", error);
-          console.log("loadX", error);
+        }
+        try {
+          updateState("loadX-bytes", await io.loadBytes(ASSETS.arrayBuffer));
+        } catch (error) {
+          updateState("loadX-bytes", error);
         }
         try {
           const blob = await io.loadBlob(ASSETS.blob);
@@ -155,6 +166,7 @@
             color: { json: ASSETS.json },
             pex: { image: ASSETS.image },
             data: { arrayBuffer: ASSETS.arrayBuffer },
+            bytes: { bytes: ASSETS.bytes },
             blob: { blob: ASSETS.blob },
           });
         } catch (err) {
@@ -165,6 +177,7 @@
         updateState("load-json", res.color);
         updateState("load-image", res.pex);
         updateState("load-arrayBuffer", res.data);
+        updateState("load-bytes", res.bytes);
         updateState("load-blob", await res.blob.text());
 
         // Error
@@ -187,6 +200,11 @@
           await io.loadArrayBuffer(ASSETS.errorNotFound);
         } catch (error) {
           updateState("error-arrayBuffer", error);
+        }
+        try {
+          await io.loadBytes(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-bytes", error);
         }
         try {
           await io.loadBlob(ASSETS.errorNotFound);
@@ -261,7 +279,9 @@
         }
 
         try {
-          const image = await io.loadImage(ASSETS.image, { cache: "force-cache" });
+          const image = await io.loadImage(ASSETS.image, {
+            cache: "force-cache",
+          });
           updateState(
             "image-options-blob",
             `Src: ${image.src}\nAttributes: ${printAttributes(image)}`,

@@ -40,6 +40,16 @@ export const loadArrayBuffer = async (url, fetchOptions) =>
   await (await ok(await fetch(url, fetchOptions))).arrayBuffer();
 
 /**
+ * Load an item and parse the Response as bytes.
+ * @function
+ * @param {RequestInfo} url
+ * @param {RequestInit} [fetchOptions]
+ * @returns {Promise<Uint8Array>}
+ */
+export const loadBytes = async (url, fetchOptions) =>
+  await (await ok(await fetch(url, fetchOptions))).bytes();
+
+/**
  * Load an item and parse the Response as blob.
  * @function
  * @param {RequestInfo} url
@@ -99,6 +109,7 @@ const LOADERS_MAP = {
   image: loadImage,
   blob: loadBlob,
   arrayBuffer: loadArrayBuffer,
+  bytes: loadBytes,
 };
 const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
 
@@ -114,6 +125,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  *   img: { image: "assets/tex.jpg" },
  *   blob: { blob: "assets/blob" },
  *   hdrImg: { arrayBuffer: "assets/tex.hdr", options: { mode: "no-cors" } },
+ *   bytes: { bytes: "assets/tex.hdr" },
  * };
  *
  * const res = await io.load(resources);
@@ -122,6 +134,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * res.img; // => HTMLImageElement
  * res.blob; // => Blob
  * res.hdrImg; // => ArrayBuffer
+ * res.bytes; // => Uint8Array
  */
 export const load = (resources) => {
   const names = Object.keys(resources);
