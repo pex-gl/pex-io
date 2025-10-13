@@ -66,77 +66,91 @@ try {
 ## pex-io
 
 - [pex-io](#module_pex-io)
-  - [.loadText(url, options)](#module_pex-io.loadText) ⇒ <code>Promise.&lt;string&gt;</code>
-  - [.loadJson(url, options)](#module_pex-io.loadJson) ⇒ <code>Promise.&lt;JSON&gt;</code>
-  - [.loadArrayBuffer(url, options)](#module_pex-io.loadArrayBuffer) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
-  - [.loadBlob(url, options)](#module_pex-io.loadBlob) ⇒ <code>Promise.&lt;Blob&gt;</code>
-  - [.loadImage(urlOrOpts, options)](#module_pex-io.loadImage) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+  - [.loadText(url, [fetchOptions])](#module_pex-io.loadText) ⇒ <code>Promise.&lt;string&gt;</code>
+  - [.loadJson(url, [fetchOptions])](#module_pex-io.loadJson) ⇒ <code>Promise.&lt;JSON&gt;</code>
+  - [.loadArrayBuffer(url, [fetchOptions])](#module_pex-io.loadArrayBuffer) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
+  - [.loadBytes(url, [fetchOptions])](#module_pex-io.loadBytes) ⇒ <code>Promise.&lt;Uint8Array&gt;</code>
+  - [.loadBlob(url, [fetchOptions])](#module_pex-io.loadBlob) ⇒ <code>Promise.&lt;Blob&gt;</code>
+  - [.loadImage(urlOrImageProperties, [fetchOptions])](#module_pex-io.loadImage) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
   - [.load(resources)](#module_pex-io.load) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
 
 <a name="module_pex-io.loadText"></a>
 
-### pex-io.loadText(url, options) ⇒ <code>Promise.&lt;string&gt;</code>
+### pex-io.loadText(url, [fetchOptions]) ⇒ <code>Promise.&lt;string&gt;</code>
 
 Load an item and parse the Response as text.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param   | Type                     |
-| ------- | ------------------------ |
-| url     | <code>RequestInfo</code> |
-| options | <code>RequestInit</code> |
+| Param          | Type                     |
+| -------------- | ------------------------ |
+| url            | <code>RequestInfo</code> |
+| [fetchOptions] | <code>RequestInit</code> |
 
 <a name="module_pex-io.loadJson"></a>
 
-### pex-io.loadJson(url, options) ⇒ <code>Promise.&lt;JSON&gt;</code>
+### pex-io.loadJson(url, [fetchOptions]) ⇒ <code>Promise.&lt;JSON&gt;</code>
 
 Load an item and parse the Response as json.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param   | Type                     |
-| ------- | ------------------------ |
-| url     | <code>RequestInfo</code> |
-| options | <code>RequestInit</code> |
+| Param          | Type                     |
+| -------------- | ------------------------ |
+| url            | <code>RequestInfo</code> |
+| [fetchOptions] | <code>RequestInit</code> |
 
 <a name="module_pex-io.loadArrayBuffer"></a>
 
-### pex-io.loadArrayBuffer(url, options) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
+### pex-io.loadArrayBuffer(url, [fetchOptions]) ⇒ <code>Promise.&lt;ArrayBuffer&gt;</code>
 
 Load an item and parse the Response as arrayBuffer.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param   | Type                     |
-| ------- | ------------------------ |
-| url     | <code>RequestInfo</code> |
-| options | <code>RequestInit</code> |
+| Param          | Type                     |
+| -------------- | ------------------------ |
+| url            | <code>RequestInfo</code> |
+| [fetchOptions] | <code>RequestInit</code> |
+
+<a name="module_pex-io.loadBytes"></a>
+
+### pex-io.loadBytes(url, [fetchOptions]) ⇒ <code>Promise.&lt;Uint8Array&gt;</code>
+
+Load an item and parse the Response as bytes.
+
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
+
+| Param          | Type                     |
+| -------------- | ------------------------ |
+| url            | <code>RequestInfo</code> |
+| [fetchOptions] | <code>RequestInit</code> |
 
 <a name="module_pex-io.loadBlob"></a>
 
-### pex-io.loadBlob(url, options) ⇒ <code>Promise.&lt;Blob&gt;</code>
+### pex-io.loadBlob(url, [fetchOptions]) ⇒ <code>Promise.&lt;Blob&gt;</code>
 
 Load an item and parse the Response as blob.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param   | Type                     |
-| ------- | ------------------------ |
-| url     | <code>RequestInfo</code> |
-| options | <code>RequestInit</code> |
+| Param          | Type                     |
+| -------------- | ------------------------ |
+| url            | <code>RequestInfo</code> |
+| [fetchOptions] | <code>RequestInit</code> |
 
 <a name="module_pex-io.loadImage"></a>
 
-### pex-io.loadImage(urlOrOpts, options) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+### pex-io.loadImage(urlOrImageProperties, [fetchOptions]) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
 
-Load an item, parse the Response as blob and create a HTML Image.
+Create and load a HTML Image. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param     | Type                                                              |
-| --------- | ----------------------------------------------------------------- |
-| urlOrOpts | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
-| options   | <code>RequestInit</code>                                          |
+| Param                | Type                                                              |
+| -------------------- | ----------------------------------------------------------------- |
+| urlOrImageProperties | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
+| [fetchOptions]       | <code>RequestInit</code>                                          |
 
 <a name="module_pex-io.load"></a>
 
@@ -159,6 +173,7 @@ const resources = {
   img: { image: "assets/tex.jpg" },
   blob: { blob: "assets/blob" },
   hdrImg: { arrayBuffer: "assets/tex.hdr", options: { mode: "no-cors" } },
+  bytes: { bytes: "assets/tex.hdr" },
 };
 
 const res = await io.load(resources);
@@ -167,6 +182,7 @@ res.data; // => Object
 res.img; // => HTMLImageElement
 res.blob; // => Blob
 res.hdrImg; // => ArrayBuffer
+res.bytes; // => Uint8Array
 ```
 
 <a name="ImageOptions"></a>
