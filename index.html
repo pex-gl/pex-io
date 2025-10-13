@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -55,7 +55,13 @@
         loadX: { ...assetTypes },
         load: { ...assetTypes },
         error: { ...assetTypes, all: null, unknownType: null },
-        "image-options": { all: null, readOnly: null, urlOnly: null },
+        "image-options": {
+          all: null,
+          readOnly: null,
+          urlOnly: null,
+          blob: null,
+          blobAbort: null,
+        },
       };
 
       const container = document.createElement("div");
@@ -105,7 +111,7 @@
 
       const filterResultsErrors = (results) =>
         Object.fromEntries(
-          Object.entries(results).filter(([_, v]) => v instanceof Error)
+          Object.entries(results).filter(([_, v]) => v instanceof Error),
         );
 
       (async () => {
@@ -128,7 +134,7 @@
         try {
           updateState(
             "loadX-arrayBuffer",
-            await io.loadArrayBuffer(ASSETS.arrayBuffer)
+            await io.loadArrayBuffer(ASSETS.arrayBuffer),
           );
         } catch (error) {
           updateState("loadX-arrayBuffer", error);
@@ -232,7 +238,7 @@
           });
           updateState(
             "image-options-all",
-            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`,
           );
         } catch (error) {
           updateState("image-options-all", error);
@@ -248,10 +254,33 @@
           const image = await io.loadImage({ url: ASSETS.image });
           updateState(
             "image-options-urlOnly",
-            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`,
           );
         } catch (error) {
           updateState("image-options-urlOnly", error);
+        }
+
+        try {
+          const image = await io.loadImage(ASSETS.image, { cache: "force-cache" });
+          updateState(
+            "image-options-blob",
+            `Src: ${image.src}\nAttributes: ${printAttributes(image)}`,
+          );
+        } catch (error) {
+          updateState("image-options-blob", error);
+        }
+
+        try {
+          const controller = new AbortController();
+
+          const imagePromise = io.loadImage(
+            { url: ASSETS.image },
+            { signal: controller.signal },
+          );
+          controller.abort("Aborting loadImage.");
+          await imagePromise;
+        } catch (error) {
+          updateState("image-options-blobAbort", error);
         }
       })();
     </script>
