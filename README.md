@@ -34,6 +34,8 @@ try {
   // => Blob
   const arrayBuffer = await io.loadArrayBuffer("assets/data.bin");
   // => ArrayBuffer
+  const bytes = await io.loadBytes("assets/data.bin");
+  // => Uint8Array
 } catch (error) {
   console.log(error);
 }
