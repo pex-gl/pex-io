@@ -219,9 +219,7 @@
             .join(", ");
 
         try {
-          const image = await io.loadImage({
-            url: ASSETS.image,
-
+          const image = await io.loadImage(ASSETS.image, {
             alt: "Image Options",
             crossOrigin: "anonymous",
             decoding: "async",
@@ -245,13 +243,13 @@
         }
 
         try {
-          await io.loadImage({ url: ASSETS.image, complete: true });
+          await io.loadImage(ASSETS.image, { complete: true });
         } catch (error) {
           updateState("image-options-readOnly", error);
         }
 
         try {
-          const image = await io.loadImage({ url: ASSETS.image });
+          const image = await io.loadImage(ASSETS.image, {});
           updateState(
             "image-options-urlOnly",
             `Src: ${image.src}\nAttributes: ${printAttributes(image)}`,

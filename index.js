@@ -50,42 +50,21 @@ export const loadBlob = async (url, options = {}) =>
   await (await ok(await fetch(url, options))).blob();
 
 /**
- * Load an item, parse the Response as blob and create a HTML Image.
+ * Load an item, create and decode an HTML Image.
  * @function
- * @param {string | import("./types.js").ImageOptions} urlOrOpts
- * @param {RequestInit} [options={}]
+ * @param {string} url
+ * @param {import("./types.js").ImageOptions} [options={}]
  * @returns {Promise<HTMLImageElement>}
  */
-export const loadImage = async (urlOrOpts, options) => {
+export const loadImage = async (url, options = {}) => {
   const img = new Image();
 
-  let src = urlOrOpts;
-  if (urlOrOpts.url) {
-    const { url, ...rest } = urlOrOpts;
-    src = url;
-    try {
-      Object.assign(img, rest);
-    } catch (error) {
-      return Promise.reject(new Error(error));
-    }
-  }
+  Object.assign(img, options);
+  img.src = url;
 
-  if (options) src = URL.createObjectURL(await loadBlob(src, options));
+  await img.decode();
 
-  return await new Promise((resolve, reject) => {
-    img.addEventListener("load", function load() {
-      img.removeEventListener("load", load);
-      if (options) URL.revokeObjectURL(src);
-      resolve(img);
-    });
-    img.addEventListener("error", function error() {
-      img.removeEventListener("error", error);
-      if (options) URL.revokeObjectURL(src);
-      reject(img);
-    });
-
-    img.src = src;
-  });
+  return img;
 };
 
 /**
