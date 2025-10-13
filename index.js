@@ -50,18 +50,18 @@ export const loadBlob = async (url, options = {}) =>
   await (await ok(await fetch(url, options))).blob();
 
 /**
- * Load an item, parse the Response as blob and create a HTML Image.
+ * Create and load a HTML Image. If fetch options are specified, load and parse the Response as blob to set the "src" property.
  * @function
- * @param {string | import("./types.js").ImageOptions} urlOrOpts
+ * @param {string | import("./types.js").ImageOptions} urlOrImageProperties
  * @param {RequestInit} [options={}]
  * @returns {Promise<HTMLImageElement>}
  */
-export const loadImage = async (urlOrOpts, options) => {
+export const loadImage = async (urlOrImageProperties, options) => {
   const img = new Image();
 
-  let src = urlOrOpts;
-  if (urlOrOpts.url) {
-    const { url, ...rest } = urlOrOpts;
+  let src = urlOrImageProperties;
+  if (urlOrImageProperties.url) {
+    const { url, ...rest } = urlOrImageProperties;
     src = url;
     try {
       Object.assign(img, rest);
