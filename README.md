@@ -57,6 +57,8 @@ try {
 <dl>
 <dt><a href="#ImageOptions">ImageOptions</a> : <code>object</code></dt>
 <dd></dd>
+<dt><a href="#VideoOptions">VideoOptions</a> : <code>object</code></dt>
+<dd></dd>
 <dt><a href="#Resource">Resource</a> : <code>object</code></dt>
 <dd></dd>
 <dt><a href="#LoadedResource">LoadedResource</a> : <code>string</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
@@ -74,6 +76,7 @@ try {
   - [.loadBytes(url, [fetchOptions])](#module_pex-io.loadBytes) ⇒ <code>Promise.&lt;Uint8Array&gt;</code>
   - [.loadBlob(url, [fetchOptions])](#module_pex-io.loadBlob) ⇒ <code>Promise.&lt;Blob&gt;</code>
   - [.loadImage(urlOrImageProperties, [fetchOptions])](#module_pex-io.loadImage) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
+  - [.loadVideo(urlOrVideoProperties, [fetchOptions])](#module_pex-io.loadVideo) ⇒ <code>Promise.&lt;HTMLVideoElement&gt;</code>
   - [.load(resources)](#module_pex-io.load) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
 
 <a name="module_pex-io.loadText"></a>
@@ -154,6 +157,19 @@ Create and load a HTML Image. If fetchOptions are specified, load and parse the 
 | urlOrImageProperties | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
 | [fetchOptions]       | <code>RequestInit</code>                                          |
 
+<a name="module_pex-io.loadVideo"></a>
+
+### pex-io.loadVideo(urlOrVideoProperties, [fetchOptions]) ⇒ <code>Promise.&lt;HTMLVideoElement&gt;</code>
+
+Create and load a HTML Video. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
+
+**Kind**: static method of [<code>pex-io</code>](#module_pex-io)
+
+| Param                | Type                                                              |
+| -------------------- | ----------------------------------------------------------------- |
+| urlOrVideoProperties | <code>string</code> \| [<code>VideoOptions</code>](#VideoOptions) |
+| [fetchOptions]       | <code>RequestInit</code>                                          |
+
 <a name="module_pex-io.load"></a>
 
 ### pex-io.load(resources) ⇒ <code>Promise.&lt;Object.&lt;string, LoadedResource&gt;&gt;</code>
@@ -173,6 +189,7 @@ const resources = {
   hello: { text: "assets/hello.txt" },
   data: { json: "assets/data.json" },
   img: { image: "assets/tex.jpg" },
+  video: { image: "assets/video.mp4" },
   blob: { blob: "assets/blob" },
   hdrImg: { arrayBuffer: "assets/tex.hdr", options: { mode: "no-cors" } },
   bytes: { bytes: "assets/tex.hdr" },
@@ -182,6 +199,7 @@ const res = await io.load(resources);
 res.hello; // => string
 res.data; // => Object
 res.img; // => HTMLImageElement
+res.video; // => HTMLVideoElement
 res.blob; // => Blob
 res.hdrImg; // => ArrayBuffer
 res.bytes; // => Uint8Array
@@ -198,6 +216,18 @@ res.bytes; // => Uint8Array
 | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
 | url     | <code>string</code> |                                                                                                             |
 | ...rest | <code>\*</code>     | [HTMLImageElement#properties](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties) |
+
+<a name="VideoOptions"></a>
+
+## VideoOptions : <code>object</code>
+
+**Kind**: global typedef
+**Properties**
+
+| Name    | Type                | Description                                                                                               |
+| ------- | ------------------- | --------------------------------------------------------------------------------------------------------- |
+| url     | <code>string</code> |                                                                                                           |
+| ...rest | <code>\*</code>     | [HTMLVideoElement#properties](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video) |
 
 <a name="Resource"></a>
 

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+# [3.2.0](https://github.com/pex-gl/pex-io/compare/v3.1.0...v3.2.0) (2026-01-23)
+
+
+### Features
+
+* add loadVideo ([75f0ec8](https://github.com/pex-gl/pex-io/commit/75f0ec863c50aea377abd121a5cd9735eff0eae4))
+
+
+
 # [3.1.0](https://github.com/pex-gl/pex-io/compare/v3.0.2...v3.1.0) (2025-10-13)
 
 
