@@ -101,12 +101,54 @@ export const loadImage = async (urlOrImageProperties, fetchOptions) => {
 };
 
 /**
+ * Create and load a HTML Video. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
+ * @function
+ * @param {string | import("./types.js").VideoOptions} urlOrVideoProperties
+ * @param {RequestInit} [fetchOptions]
+ * @returns {Promise<HTMLVideoElement>}
+ */
+export const loadVideo = async (urlOrVideoProperties, fetchOptions) => {
+  const video = document.createElement("video");
+
+  let src = urlOrVideoProperties;
+  if (urlOrVideoProperties.url) {
+    const { url, ...rest } = urlOrVideoProperties;
+    src = url;
+    try {
+      Object.assign(video, rest);
+    } catch (error) {
+      return Promise.reject(new Error(error));
+    }
+  }
+
+  if (fetchOptions) {
+    src = URL.createObjectURL(await loadBlob(src, fetchOptions));
+  }
+
+  return await new Promise((resolve, reject) => {
+    video.addEventListener("canplaythrough", function canplaythrough() {
+      video.removeEventListener("canplaythrough", canplaythrough);
+      if (fetchOptions) URL.revokeObjectURL(src);
+      resolve(video);
+    });
+    video.addEventListener("error", function error() {
+      video.removeEventListener("error", error);
+      if (fetchOptions) URL.revokeObjectURL(src);
+      reject(video);
+    });
+
+    video.src = src;
+  });
+};
+
+/**
  * @private
  */
 const LOADERS_MAP = {
   text: loadText,
   json: loadJson,
   image: loadImage,
+  video: loadVideo,
   blob: loadBlob,
   arrayBuffer: loadArrayBuffer,
   bytes: loadBytes,
@@ -123,6 +165,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  *   hello: { text: "assets/hello.txt" },
  *   data: { json: "assets/data.json" },
  *   img: { image: "assets/tex.jpg" },
+ *   video: { image: "assets/video.mp4" },
  *   blob: { blob: "assets/blob" },
  *   hdrImg: { arrayBuffer: "assets/tex.hdr", options: { mode: "no-cors" } },
  *   bytes: { bytes: "assets/tex.hdr" },
@@ -132,6 +175,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * res.hello; // => string
  * res.data; // => Object
  * res.img; // => HTMLImageElement
+ * res.video; // => HTMLVideoElement
  * res.blob; // => Blob
  * res.hdrImg; // => ArrayBuffer
  * res.bytes; // => Uint8Array

@@ -3,6 +3,11 @@
  * @property {string} url
  * @property {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties|HTMLImageElement#properties}
  */
+/**
+ * @typedef {object} VideoOptions
+ * @property {string} url
+ * @property {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video|HTMLVideoElement#properties}
+ */
 
 /**
  * @typedef {object} Resource
