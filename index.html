@@ -23,6 +23,15 @@
       main {
         padding: 0 20px;
       }
+
+      img,
+      video {
+        max-width: 100%;
+      }
+
+      .Error {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -38,6 +47,7 @@
         text: "assets/hello.txt",
         json: "assets/color.json",
         image: "assets/pex.png",
+        video: "assets/video.mp4",
         arrayBuffer: "assets/data.bin",
         bytes: "assets/data.bin",
         blob: "assets/hello.txt",
@@ -48,6 +58,7 @@
         text: null,
         json: null,
         image: null,
+        video: null,
         arrayBuffer: null,
         bytes: null,
         blob: null,
@@ -64,20 +75,27 @@
           blob: null,
           blobAbort: null,
         },
+        "video-options": {
+          all: null,
+          readOnly: null,
+          urlOnly: null,
+          blob: null,
+          blobAbort: null,
+        },
       };
 
       const container = document.createElement("div");
       Object.assign(container.style, {
         display: "flex",
         "flex-wrap": "wrap",
-        gap: "60px",
+        gap: "20px 40px",
       });
 
       Object.keys(categories).map((category) => {
         const categoryContainer = document.createElement("div");
         const title = document.createElement("h2");
         title.innerHTML = category;
-        categoryContainer.appendChild(title);
+        categoryContainer.append(title);
 
         Object.keys(categories[category]).map((itemName) => {
           const item = document.createElement("div");
@@ -87,25 +105,35 @@
           itemValue.className = `${category}-${itemName}`;
           itemValue.innerHTML = "loading...";
 
-          item.appendChild(itemTitle);
-          item.appendChild(itemValue);
+          item.append(itemTitle);
+          item.append(itemValue);
 
-          categoryContainer.appendChild(item);
+          categoryContainer.append(item);
         });
-        container.appendChild(categoryContainer);
+        container.append(categoryContainer);
       });
 
-      document.querySelector(".Result").appendChild(container);
+      document.querySelector(".Result").append(container);
 
       const updateState = (selector, value) => {
         const element = document.querySelector(`.${selector}`);
-        if (value instanceof Image) {
+        if (value instanceof Image || value instanceof HTMLVideoElement) {
           element.innerHTML = "";
-          element.appendChild(value);
+          element.append(value);
+          element.style.maxWidth = "256px";
+          if (value instanceof HTMLVideoElement && value.error) {
+            const p = document.createElement("p");
+            p.classList.add("Error");
+            p.innerText = value.error?.message || `Video failed to load.`;
+            element.append(p);
+          }
           return;
         }
 
-        if (value instanceof Error) console.error(value);
+        if (value instanceof Error) {
+          console.error(value);
+          element.classList.add("Error");
+        }
         if (value.color) value = JSON.stringify(value);
         if (value instanceof ArrayBuffer) {
           value = `ArrayBuffer ${value.byteLength} bytes`;
@@ -139,6 +167,11 @@
           updateState("loadX-image", error);
         }
         try {
+          updateState("loadX-video", await io.loadVideo(ASSETS.video));
+        } catch (error) {
+          updateState("loadX-video", error);
+        }
+        try {
           updateState(
             "loadX-arrayBuffer",
             await io.loadArrayBuffer(ASSETS.arrayBuffer),
@@ -165,6 +198,7 @@
             hello: { text: ASSETS.text },
             color: { json: ASSETS.json },
             pex: { image: ASSETS.image },
+            video: { video: ASSETS.video },
             data: { arrayBuffer: ASSETS.arrayBuffer },
             bytes: { bytes: ASSETS.bytes },
             blob: { blob: ASSETS.blob },
@@ -176,6 +210,7 @@
         updateState("load-text", res.hello);
         updateState("load-json", res.color);
         updateState("load-image", res.pex);
+        updateState("load-video", res.video);
         updateState("load-arrayBuffer", res.data);
         updateState("load-bytes", res.bytes);
         updateState("load-blob", await res.blob.text());
@@ -195,6 +230,11 @@
           await io.loadImage(ASSETS.errorNotFound);
         } catch (error) {
           updateState("error-image", error);
+        }
+        try {
+          await io.loadVideo(ASSETS.errorNotFound);
+        } catch (error) {
+          updateState("error-video", error);
         }
         try {
           await io.loadArrayBuffer(ASSETS.errorNotFound);
@@ -230,12 +270,12 @@
           }
         }
 
-        // Image option
         const printAttributes = (element) =>
           Array.from(element.attributes)
             .map((attribute) => attribute.name)
             .join(", ");
 
+        // Image option
         try {
           const image = await io.loadImage({
             url: ASSETS.image,
@@ -301,6 +341,74 @@
           await imagePromise;
         } catch (error) {
           updateState("image-options-blobAbort", error);
+        }
+
+        // Video option
+        try {
+          const video = await io.loadVideo({
+            url: ASSETS.video,
+
+            autoplay: true,
+            controls: true,
+            controlslist: "",
+            crossOrigin: "anonymous",
+            disablepictureinpicture: false,
+            disableremoteplayback: false,
+            height: 480,
+            loop: true,
+            muted: false,
+            playsinline: true,
+            poster: ASSETS.image,
+            preload: "metadata",
+            width: 480,
+          });
+          updateState(
+            "video-options-all",
+            `Src: ${video.src}\nAttributes: ${printAttributes(video)}`,
+          );
+        } catch (error) {
+          updateState("video-options-all", error);
+        }
+
+        try {
+          await io.loadVideo({ url: ASSETS.video, videoWidth: 480 });
+        } catch (error) {
+          updateState("video-options-readOnly", error);
+        }
+
+        try {
+          const video = await io.loadVideo({ url: ASSETS.video });
+          updateState(
+            "video-options-urlOnly",
+            `Src: ${video.src}\nAttributes: ${printAttributes(video)}`,
+          );
+        } catch (error) {
+          updateState("video-options-urlOnly", error);
+        }
+
+        try {
+          const video = await io.loadVideo(ASSETS.video, {
+            cache: "force-cache",
+          });
+          updateState(
+            "video-options-blob",
+            `Src: ${video.src}\nAttributes: ${printAttributes(video)}`,
+          );
+        } catch (error) {
+          updateState("video-options-blob", error);
+        }
+
+        try {
+          const controller = new AbortController();
+
+          const videoPromise = io.loadVideo(
+            { url: ASSETS.video },
+            { signal: controller.signal },
+          );
+          controller.abort("Aborting loadVideo.");
+          await videoPromise;
+        } catch (error) {
+          updateState("video-options-blobAbort", error);
         }
       })();
     </script>
