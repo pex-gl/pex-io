@@ -11,6 +11,7 @@ const ok = async (response) =>
 
 /**
  * Load an item and parse the Response as text.
+ *
  * @function
  * @param {RequestInfo} url
  * @param {RequestInit} [fetchOptions]
@@ -21,6 +22,7 @@ export const loadText = async (url, fetchOptions) =>
 
 /**
  * Load an item and parse the Response as json.
+ *
  * @function
  * @param {RequestInfo} url
  * @param {RequestInit} [fetchOptions]
@@ -31,6 +33,7 @@ export const loadJson = async (url, fetchOptions) =>
 
 /**
  * Load an item and parse the Response as arrayBuffer.
+ *
  * @function
  * @param {RequestInfo} url
  * @param {RequestInit} [fetchOptions]
@@ -41,6 +44,7 @@ export const loadArrayBuffer = async (url, fetchOptions) =>
 
 /**
  * Load an item and parse the Response as bytes.
+ *
  * @function
  * @param {RequestInfo} url
  * @param {RequestInit} [fetchOptions]
@@ -51,6 +55,7 @@ export const loadBytes = async (url, fetchOptions) =>
 
 /**
  * Load an item and parse the Response as blob.
+ *
  * @function
  * @param {RequestInfo} url
  * @param {RequestInit} [fetchOptions]
@@ -209,25 +214,23 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  * @param {Object<string, import("./types.js").Resource>} resources
  * @returns {Promise<Object<string, import("./types.js").LoadedResource>>}
  */
-export const load = (resources) => {
+export const load = async (resources) => {
   const names = Object.keys(resources);
 
-  return Promise.allSettled(
+  const results = await Promise.allSettled(
     names.map(async (name) => {
       const res = resources[name];
       const loader = LOADERS_MAP_KEYS.find((loader) => res[loader]);
       if (loader) return await LOADERS_MAP[loader](res[loader], res.options);
-      return Promise.reject(
-        new Error(`io.load: unknown resource type "${Object.keys(res)}".
-Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`),
-      );
+      throw new Error(`io.load: unknown resource type "${Object.keys(res)}".
+Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`);
     }),
-  ).then((values) =>
-    Object.fromEntries(
-      Array.from(
-        values.map((v) => (v.status === "fulfilled" ? v.value : v.reason)),
-        (v, i) => [names[i], v],
-      ),
-    ),
+  );
+
+  return Object.fromEntries(
+    results.map((v, i) => [
+      names[i],
+      v.status === "fulfilled" ? v.value : v.reason,
+    ]),
   );
 };
