@@ -225,7 +225,7 @@ Resource needs one of ${LOADERS_MAP_KEYS.join("|")} set to an url.`),
   ).then((values) =>
     Object.fromEntries(
       Array.from(
-        values.map((v) => v.value || v.reason),
+        values.map((v) => (v.status === "fulfilled" ? v.value : v.reason)),
         (v, i) => [names[i], v],
       ),
     ),
