@@ -14,12 +14,15 @@
  * @typedef {object} Resource
  * @property {string} [text]
  * @property {string} [json]
- * @property {string} [image]
- * @property {string} [binary]
+ * @property {string | ImageOptions} [image]
+ * @property {string | VideoOptions} [video]
+ * @property {string} [blob]
+ * @property {string} [arrayBuffer]
+ * @property {string} [bytes]
  * @property {RequestInit} [options] {@link https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters|Request#parameters}
  */
 /**
- * @typedef {string | object | HTMLImageElement | Blob | ArrayBuffer} LoadedResource
+ * @typedef {string | object | HTMLImageElement | HTMLVideoElement | Blob | ArrayBuffer | Uint8Array | Error} LoadedResource
  */
 
 export {};

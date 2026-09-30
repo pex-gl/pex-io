@@ -206,7 +206,7 @@ const LOADERS_MAP_KEYS = Object.keys(LOADERS_MAP);
  *   hello: { text: "assets/hello.txt" },
  *   data: { json: "assets/data.json" },
  *   img: { image: "assets/tex.jpg" },
- *   video: { image: "assets/video.mp4" },
+ *   video: { video: "assets/video.mp4" },
  *   blob: { blob: "assets/blob" },
  *   hdrImg: {
  *     arrayBuffer: "assets/tex.hdr",
