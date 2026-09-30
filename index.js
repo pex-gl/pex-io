@@ -5,7 +5,7 @@ const ok = async (response) =>
     ? response
     : Promise.reject(
         new Error(
-          `GET ${response.url} ${response.status} (${response.statusText})`,
+          `GET ${response.url} ${response.status}${response.statusText ? ` (${response.statusText})` : ""}`,
         ),
       );
 
