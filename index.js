@@ -1,13 +1,15 @@
 /** @module pex-io */
 
-const ok = async (response) =>
-  response.ok
-    ? response
-    : Promise.reject(
-        new Error(
-          `GET ${response.url} ${response.status}${response.statusText ? ` (${response.statusText})` : ""}`,
-        ),
-      );
+/** @private */
+const fetchOk = async (url, fetchOptions) => {
+  const response = await fetch(url, fetchOptions);
+  if (response.ok) return response;
+
+  throw new Error(
+    `${fetchOptions?.method ?? url.method ?? "GET"} ${response.url} ${response.status}${response.statusText ? ` (${response.statusText})` : ""}`,
+    { cause: response },
+  );
+};
 
 /**
  * Load an item and parse the Response as text.
@@ -18,7 +20,7 @@ const ok = async (response) =>
  * @returns {Promise<string>}
  */
 export const loadText = async (url, fetchOptions) =>
-  await (await ok(await fetch(url, fetchOptions))).text();
+  await (await fetchOk(url, fetchOptions)).text();
 
 /**
  * Load an item and parse the Response as json.
@@ -29,7 +31,7 @@ export const loadText = async (url, fetchOptions) =>
  * @returns {Promise<JSON>}
  */
 export const loadJson = async (url, fetchOptions) =>
-  await (await ok(await fetch(url, fetchOptions))).json();
+  await (await fetchOk(url, fetchOptions)).json();
 
 /**
  * Load an item and parse the Response as arrayBuffer.
@@ -40,7 +42,7 @@ export const loadJson = async (url, fetchOptions) =>
  * @returns {Promise<ArrayBuffer>}
  */
 export const loadArrayBuffer = async (url, fetchOptions) =>
-  await (await ok(await fetch(url, fetchOptions))).arrayBuffer();
+  await (await fetchOk(url, fetchOptions)).arrayBuffer();
 
 /**
  * Load an item and parse the Response as bytes.
@@ -51,7 +53,7 @@ export const loadArrayBuffer = async (url, fetchOptions) =>
  * @returns {Promise<Uint8Array>}
  */
 export const loadBytes = async (url, fetchOptions) =>
-  await (await ok(await fetch(url, fetchOptions))).bytes();
+  await (await fetchOk(url, fetchOptions)).bytes();
 
 /**
  * Load an item and parse the Response as blob.
@@ -62,7 +64,7 @@ export const loadBytes = async (url, fetchOptions) =>
  * @returns {Promise<Blob>}
  */
 export const loadBlob = async (url, fetchOptions) =>
-  await (await ok(await fetch(url, fetchOptions))).blob();
+  await (await fetchOk(url, fetchOptions)).blob();
 
 /** @private */
 const loadMediaElement = async (
