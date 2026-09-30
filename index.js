@@ -15,7 +15,7 @@ const fetchOk = async (url, fetchOptions) => {
  * Load an item and parse the Response as text.
  *
  * @function
- * @param {RequestInfo} url
+ * @param {RequestInfo | URL} url
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<string>}
  */
@@ -26,7 +26,7 @@ export const loadText = async (url, fetchOptions) =>
  * Load an item and parse the Response as json.
  *
  * @function
- * @param {RequestInfo} url
+ * @param {RequestInfo | URL} url
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<JSON>}
  */
@@ -37,7 +37,7 @@ export const loadJson = async (url, fetchOptions) =>
  * Load an item and parse the Response as arrayBuffer.
  *
  * @function
- * @param {RequestInfo} url
+ * @param {RequestInfo | URL} url
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<ArrayBuffer>}
  */
@@ -48,7 +48,7 @@ export const loadArrayBuffer = async (url, fetchOptions) =>
  * Load an item and parse the Response as bytes.
  *
  * @function
- * @param {RequestInfo} url
+ * @param {RequestInfo | URL} url
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<Uint8Array>}
  */
@@ -59,7 +59,7 @@ export const loadBytes = async (url, fetchOptions) =>
  * Load an item and parse the Response as blob.
  *
  * @function
- * @param {RequestInfo} url
+ * @param {RequestInfo | URL} url
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<Blob>}
  */
@@ -76,7 +76,7 @@ const loadMediaElement = async (
 ) => {
   let url = urlOrProperties;
   let readyEvent = defaultReadyEvent;
-  if (urlOrProperties.url) {
+  if (urlOrProperties.url !== undefined) {
     const {
       url: propertiesUrl,
       readyEvent: propertiesReadyEvent,
@@ -155,7 +155,7 @@ const loadMediaElement = async (
  * the Response as blob to set the "src" property.
  *
  * @function
- * @param {string | import("./types.js").ImageOptions} urlOrImageProperties
+ * @param {string | URL | import("./types.js").ImageOptions} urlOrImageProperties
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<HTMLImageElement>}
  */
@@ -173,7 +173,7 @@ export const loadImage = async (urlOrImageProperties, fetchOptions) =>
  * the Response as blob to set the "src" property.
  *
  * @function
- * @param {string | import("./types.js").VideoOptions} urlOrVideoProperties
+ * @param {string | URL | import("./types.js").VideoOptions} urlOrVideoProperties
  * @param {RequestInit} [fetchOptions]
  * @returns {Promise<HTMLVideoElement>}
  */
