@@ -6,6 +6,7 @@
 /**
  * @typedef {object} VideoOptions
  * @property {string} url
+ * @property {string} [readyEvent="canplaythrough"] Event resolving the promise. "canplaythrough" might never fire depending on "preload" and platform policies (eg. iOS, data saver): use an earlier event like "loadedmetadata" or "canplay" instead.
  * @property {...*} rest {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video|HTMLVideoElement#properties}
  */
 

@@ -68,14 +68,20 @@ export const loadBlob = async (url, fetchOptions) =>
 const loadMediaElement = async (
   type,
   element,
-  readyEvent,
+  defaultReadyEvent,
   urlOrProperties,
   fetchOptions,
 ) => {
   let url = urlOrProperties;
+  let readyEvent = defaultReadyEvent;
   if (urlOrProperties.url) {
-    const { url: propertiesUrl, ...rest } = urlOrProperties;
+    const {
+      url: propertiesUrl,
+      readyEvent: propertiesReadyEvent,
+      ...rest
+    } = urlOrProperties;
     url = propertiesUrl;
+    readyEvent = propertiesReadyEvent ?? defaultReadyEvent;
     Object.assign(element, rest);
   }
 
