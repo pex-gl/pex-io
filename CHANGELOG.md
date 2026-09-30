@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+# [3.3.0](https://github.com/pex-gl/pex-io/compare/v3.2.0...v3.3.0) (2026-09-30)
+
+### Bug Fixes
+
+* check for statusText in ok() ([69eea31](https://github.com/pex-gl/pex-io/commit/69eea312ad56c8b7168f169b6d1b680c4678a932))
+* correctly check promise status in load() ([9f58691](https://github.com/pex-gl/pex-io/commit/9f58691e88a05d5cc01c58a1b73551ba3e10921e))
+* keep video blob URL until the element is emptied ([a9b029c](https://github.com/pex-gl/pex-io/commit/a9b029caf93f2e8acf64bfeadcbb23e850f742cc))
+
+### Features
+
+* add readyEvent option to loadVideo ([c7cb512](https://github.com/pex-gl/pex-io/commit/c7cb5121ffa6b6ac1791130f554f43b58cd2fdef))
+* add request method and response cause to fetch errors ([10057d1](https://github.com/pex-gl/pex-io/commit/10057d1ab31a450b9fab01f600776a371c83f6fe))
+* reject media loading with Errors ([5c50b0e](https://github.com/pex-gl/pex-io/commit/5c50b0ee3b7ab55ea0adc69ce00e5ad2e0913fb1)), closes [#7](https://github.com/pex-gl/pex-io/issues/7)
+
 # [3.2.0](https://github.com/pex-gl/pex-io/compare/v3.1.0...v3.2.0) (2026-01-23)
 
 

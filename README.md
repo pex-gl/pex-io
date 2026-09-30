@@ -61,7 +61,7 @@ try {
 <dd></dd>
 <dt><a href="#Resource">Resource</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#LoadedResource">LoadedResource</a> : <code>string</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>Blob</code> | <code>ArrayBuffer</code></dt>
+<dt><a href="#LoadedResource">LoadedResource</a> : <code>string</code> | <code>object</code> | <code>HTMLImageElement</code> | <code>HTMLVideoElement</code> | <code>Blob</code> | <code>ArrayBuffer</code> | <code>Uint8Array</code> | <code>Error</code></dt>
 <dd></dd>
 </dl>
 
@@ -87,10 +87,10 @@ Load an item and parse the Response as text.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param          | Type                     |
-| -------------- | ------------------------ |
-| url            | <code>RequestInfo</code> |
-| [fetchOptions] | <code>RequestInit</code> |
+| Param          | Type                                         |
+| -------------- | -------------------------------------------- |
+| url            | <code>RequestInfo</code> \| <code>URL</code> |
+| [fetchOptions] | <code>RequestInit</code>                     |
 
 <a name="module_pex-io.loadJson"></a>
 
@@ -100,10 +100,10 @@ Load an item and parse the Response as json.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param          | Type                     |
-| -------------- | ------------------------ |
-| url            | <code>RequestInfo</code> |
-| [fetchOptions] | <code>RequestInit</code> |
+| Param          | Type                                         |
+| -------------- | -------------------------------------------- |
+| url            | <code>RequestInfo</code> \| <code>URL</code> |
+| [fetchOptions] | <code>RequestInit</code>                     |
 
 <a name="module_pex-io.loadArrayBuffer"></a>
 
@@ -113,10 +113,10 @@ Load an item and parse the Response as arrayBuffer.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param          | Type                     |
-| -------------- | ------------------------ |
-| url            | <code>RequestInfo</code> |
-| [fetchOptions] | <code>RequestInit</code> |
+| Param          | Type                                         |
+| -------------- | -------------------------------------------- |
+| url            | <code>RequestInfo</code> \| <code>URL</code> |
+| [fetchOptions] | <code>RequestInit</code>                     |
 
 <a name="module_pex-io.loadBytes"></a>
 
@@ -126,10 +126,10 @@ Load an item and parse the Response as bytes.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param          | Type                     |
-| -------------- | ------------------------ |
-| url            | <code>RequestInfo</code> |
-| [fetchOptions] | <code>RequestInit</code> |
+| Param          | Type                                         |
+| -------------- | -------------------------------------------- |
+| url            | <code>RequestInfo</code> \| <code>URL</code> |
+| [fetchOptions] | <code>RequestInit</code>                     |
 
 <a name="module_pex-io.loadBlob"></a>
 
@@ -139,36 +139,38 @@ Load an item and parse the Response as blob.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param          | Type                     |
-| -------------- | ------------------------ |
-| url            | <code>RequestInfo</code> |
-| [fetchOptions] | <code>RequestInit</code> |
+| Param          | Type                                         |
+| -------------- | -------------------------------------------- |
+| url            | <code>RequestInfo</code> \| <code>URL</code> |
+| [fetchOptions] | <code>RequestInit</code>                     |
 
 <a name="module_pex-io.loadImage"></a>
 
 ### pex-io.loadImage(urlOrImageProperties, [fetchOptions]) ⇒ <code>Promise.&lt;HTMLImageElement&gt;</code>
 
-Create and load a HTML Image. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
+Create and load a HTML Image. If fetchOptions are specified, load and parse
+the Response as blob to set the "src" property.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param                | Type                                                              |
-| -------------------- | ----------------------------------------------------------------- |
-| urlOrImageProperties | <code>string</code> \| [<code>ImageOptions</code>](#ImageOptions) |
-| [fetchOptions]       | <code>RequestInit</code>                                          |
+| Param                | Type                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| urlOrImageProperties | <code>string</code> \| <code>URL</code> \| [<code>ImageOptions</code>](#ImageOptions) |
+| [fetchOptions]       | <code>RequestInit</code>                                                              |
 
 <a name="module_pex-io.loadVideo"></a>
 
 ### pex-io.loadVideo(urlOrVideoProperties, [fetchOptions]) ⇒ <code>Promise.&lt;HTMLVideoElement&gt;</code>
 
-Create and load a HTML Video. If fetchOptions are specified, load and parse the Response as blob to set the "src" property.
+Create and load a HTML Video. If fetchOptions are specified, load and parse
+the Response as blob to set the "src" property.
 
 **Kind**: static method of [<code>pex-io</code>](#module_pex-io)
 
-| Param                | Type                                                              |
-| -------------------- | ----------------------------------------------------------------- |
-| urlOrVideoProperties | <code>string</code> \| [<code>VideoOptions</code>](#VideoOptions) |
-| [fetchOptions]       | <code>RequestInit</code>                                          |
+| Param                | Type                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| urlOrVideoProperties | <code>string</code> \| <code>URL</code> \| [<code>VideoOptions</code>](#VideoOptions) |
+| [fetchOptions]       | <code>RequestInit</code>                                                              |
 
 <a name="module_pex-io.load"></a>
 
@@ -189,9 +191,12 @@ const resources = {
   hello: { text: "assets/hello.txt" },
   data: { json: "assets/data.json" },
   img: { image: "assets/tex.jpg" },
-  video: { image: "assets/video.mp4" },
+  video: { video: "assets/video.mp4" },
   blob: { blob: "assets/blob" },
-  hdrImg: { arrayBuffer: "assets/tex.hdr", options: { mode: "no-cors" } },
+  hdrImg: {
+    arrayBuffer: "assets/tex.hdr",
+    options: { mode: "no-cors" },
+  },
   bytes: { bytes: "assets/tex.hdr" },
 };
 
@@ -212,10 +217,10 @@ res.bytes; // => Uint8Array
 **Kind**: global typedef
 **Properties**
 
-| Name    | Type                | Description                                                                                                 |
-| ------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
-| url     | <code>string</code> |                                                                                                             |
-| ...rest | <code>\*</code>     | [HTMLImageElement#properties](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties) |
+| Name    | Type                                    | Description                                                                                                 |
+| ------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| url     | <code>string</code> \| <code>URL</code> |                                                                                                             |
+| ...rest | <code>any</code>                        | [HTMLImageElement#properties](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement#properties) |
 
 <a name="VideoOptions"></a>
 
@@ -224,10 +229,11 @@ res.bytes; // => Uint8Array
 **Kind**: global typedef
 **Properties**
 
-| Name    | Type                | Description                                                                                               |
-| ------- | ------------------- | --------------------------------------------------------------------------------------------------------- |
-| url     | <code>string</code> |                                                                                                           |
-| ...rest | <code>\*</code>     | [HTMLVideoElement#properties](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video) |
+| Name         | Type                                    | Default                                             | Description                                                                                                                                                                                         |
+| ------------ | --------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url          | <code>string</code> \| <code>URL</code> |                                                     |                                                                                                                                                                                                     |
+| [readyEvent] | <code>string</code>                     | <code>&quot;&#x27;canplaythrough&#x27;&quot;</code> | Event resolving the promise. "canplaythrough" might never fire depending on "preload" and platform policies (eg. iOS, data saver): use an earlier event like "loadedmetadata" or "canplay" instead. |
+| ...rest      | <code>any</code>                        |                                                     | [HTMLVideoElement#properties](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video)                                                                                           |
 
 <a name="Resource"></a>
 
@@ -236,17 +242,20 @@ res.bytes; // => Uint8Array
 **Kind**: global typedef
 **Properties**
 
-| Name      | Type                     | Description                                                                                       |
-| --------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
-| [text]    | <code>string</code>      |                                                                                                   |
-| [json]    | <code>string</code>      |                                                                                                   |
-| [image]   | <code>string</code>      |                                                                                                   |
-| [binary]  | <code>string</code>      |                                                                                                   |
-| [options] | <code>RequestInit</code> | [Request#parameters](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters) |
+| Name          | Type                                                                                  | Description                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [text]        | <code>string</code> \| <code>URL</code>                                               |                                                                                                   |
+| [json]        | <code>string</code> \| <code>URL</code>                                               |                                                                                                   |
+| [image]       | <code>string</code> \| <code>URL</code> \| [<code>ImageOptions</code>](#ImageOptions) |                                                                                                   |
+| [video]       | <code>string</code> \| <code>URL</code> \| [<code>VideoOptions</code>](#VideoOptions) |                                                                                                   |
+| [blob]        | <code>string</code> \| <code>URL</code>                                               |                                                                                                   |
+| [arrayBuffer] | <code>string</code> \| <code>URL</code>                                               |                                                                                                   |
+| [bytes]       | <code>string</code> \| <code>URL</code>                                               |                                                                                                   |
+| [options]     | <code>RequestInit</code>                                                              | [Request#parameters](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#parameters) |
 
 <a name="LoadedResource"></a>
 
-## LoadedResource : <code>string</code> \| <code>object</code> \| <code>HTMLImageElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code>
+## LoadedResource : <code>string</code> \| <code>object</code> \| <code>HTMLImageElement</code> \| <code>HTMLVideoElement</code> \| <code>Blob</code> \| <code>ArrayBuffer</code> \| <code>Uint8Array</code> \| <code>Error</code>
 
 **Kind**: global typedef
 
