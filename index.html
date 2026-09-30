@@ -121,12 +121,6 @@
           element.innerHTML = "";
           element.append(value);
           element.style.maxWidth = "256px";
-          if (value instanceof HTMLVideoElement && value.error) {
-            const p = document.createElement("p");
-            p.classList.add("Error");
-            p.innerText = value.error?.message || `Video failed to load.`;
-            element.append(p);
-          }
           return;
         }
 
