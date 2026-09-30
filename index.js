@@ -97,15 +97,24 @@ const loadMediaElement = async (
   return await new Promise((resolve, reject) => {
     const controller = new AbortController();
     const listenerOptions = { signal: controller.signal };
+    const revokeSrc = () => {
+      if (fetchOptions) URL.revokeObjectURL(src);
+    };
     const dispose = () => {
       controller.abort();
-      if (fetchOptions) URL.revokeObjectURL(src);
+      revokeSrc();
     };
 
     element.addEventListener(
       readyEvent,
       () => {
-        dispose();
+        controller.abort();
+        if (fetchOptions && element instanceof HTMLMediaElement) {
+          // Media keeps reading from src when buffering, seeking or looping
+          element.addEventListener("emptied", revokeSrc, { once: true });
+        } else {
+          revokeSrc();
+        }
         resolve(element);
       },
       listenerOptions,
